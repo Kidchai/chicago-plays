@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WebScraper {
-
-    public static void main(String[] args) {
+    public List<Event> getEventList() {
         var client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
@@ -28,9 +27,7 @@ public class WebScraper {
                 var imageURLParent = eventNode.querySelector(".vem-single-event-thumbnail > a");
                 DomElement imageURL = (DomElement) imageURLParent.getFirstChild();
                 var link = imageURL.getAttribute("src");
-
                 event.setImageURL(link);
-                System.out.printf("url: %s\n", link);
 
                 var title = eventNode.querySelector(".vem-single-event-title");
                 event.setTitle(title.getTextContent());
@@ -62,6 +59,6 @@ public class WebScraper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("n");
+        return eventList;
     }
 }
