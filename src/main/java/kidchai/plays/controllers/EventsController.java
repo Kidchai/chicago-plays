@@ -18,6 +18,6 @@ public class EventsController {
     @GetMapping("/events")
     public String showEvents(Model model) {
         model.addAttribute("events", eventDAO.index());
-        return "events/index";
+        return "events/events";
     }
 }

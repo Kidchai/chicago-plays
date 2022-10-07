@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chicago plays</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<p>
+<h3>Chicago Plays</h3>
+</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Theatre</th>
+            <th>Genres</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <td><span th:text="${event.getTitle()}"> Title </span></td>
+            <td><span th:text="${event.getTheatreName()}"> Theatre </span></td>
+            <td><span th:text="${event.getGenres()}"> Genres </span></td>
+            <td><span th:text="${event.getDescription()}"> Description </span></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
