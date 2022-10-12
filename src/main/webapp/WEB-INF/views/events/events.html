@@ -20,10 +20,12 @@
         </thead>
         <tbody>
         <tr th:each="event : ${events}">
-            <td><span th:text="${event.getTitle()}"> Title </span></td>
-            <td><span th:text="${event.getTheatre()}"> Theatre </span></td>
-            <td><span th:text="${event.getGenres()}"> Genres </span></td>
-            <td><span th:text="${event.getDescription()}"> Description </span></td>
+            <td>
+                <a th:href="${event.details}" th:text="${event.title}">user</a>
+            </td>
+            <td><span th:text="${event.theatre}"> Theatre </span></td>
+            <td><span th:text="${event.genres}"> Genres </span></td>
+            <td><span th:text="${event.description}"> Description </span></td>
         </tr>
         </tbody>
     </table>

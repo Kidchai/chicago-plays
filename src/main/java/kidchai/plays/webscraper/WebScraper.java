@@ -1,8 +1,10 @@
 package kidchai.plays.webscraper;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
-import kidchai.plays.models.Event;
+import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import kidchai.plays.model.Event;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,36 +52,38 @@ public class WebScraper {
     private Event getEvent(DomNode eventNode) {
         Event event = new Event();
 
-        var imageURLParent = eventNode.querySelector(".vem-single-event-thumbnail > a");
-        DomElement imageURL = (DomElement) imageURLParent.getFirstChild();
-        var link = imageURL.getAttribute("src");
+        var imageUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
+
+        var link = imageUrl.getAttribute("src");
         event.setImageUrl(link);
 
         var title = eventNode.querySelector(".vem-single-event-title");
-        event.setTitle(title.getTextContent());
+        var titleValue = title == null ? null : title.getTextContent();
+        event.setTitle(titleValue);
 
         var theatre = eventNode.querySelector(".vem-single-event-theatre-name");
         var theatreValue = theatre == null ? null : theatre.getTextContent();
         event.setTheatre(theatreValue);
 
         var genres = eventNode.querySelector(".vem-single-event-genres");
-        event.setGenres(genres.getTextContent());
+        var genresValue = genres == null ? null : genres.getTextContent();
+        event.setGenres(genresValue);
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
         var earliestDate = dates.querySelector(".vem-earliest");
         var latestDate = dates.querySelector(".vem-latest");
-        var earliestDateValue = earliestDate == null  ? null : earliestDate.getTextContent();
-        var latestDateValue = latestDate == null  ? null : latestDate.getTextContent();
+        var earliestDateValue = earliestDate == null ? null : earliestDate.getTextContent();
+        var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
         event.setEarliestDate(earliestDateValue);
         event.setLatestDate(latestDateValue);
 
         var description = eventNode.querySelector(".vem-single-event-excerpt");
-        event.setDescription(description.getTextContent());
+        var descriptionValue = description == null ? null : description.getTextContent();
+        event.setDescription(descriptionValue);
 
-        var detailsParent = eventNode.querySelector(".vem-single-event-thumbnail");
-        DomElement detailsDomElement = (DomElement) detailsParent.getFirstChild();
-        var details = detailsDomElement.getAttribute("href");
-        event.setDetails(details);
+        var details = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
+        var detailsValue = details == null ? null : details.getAttribute("href");
+        event.setEventUrl(detailsValue);
 
         return event;
     }
@@ -87,7 +91,6 @@ public class WebScraper {
     private String getNextPageURL() {
         var nextPage = (DomElement) page.querySelector(".vem-page-next");
         searchUrl = nextPage == null ? null : nextPage.getAttribute("href");
-//        searchUrl = nextPage.getAttribute("href");
         if (searchUrl != null) {
             try {
                 page = client.getPage(searchUrl);

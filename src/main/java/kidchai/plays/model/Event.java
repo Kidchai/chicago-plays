@@ -1,4 +1,4 @@
-package kidchai.plays.models;
+package kidchai.plays.model;
 
 public class Event {
     private String imageUrl;
@@ -8,7 +8,7 @@ public class Event {
     private String earliestDate;
     private String latestDate;
     private String description;
-    private String details;
+    private String eventUrl;
 
     public String getEarliestDate() {
         return earliestDate;
@@ -26,12 +26,12 @@ public class Event {
         this.latestDate = latestDate;
     }
 
-    public String getDetails() {
-        return details;
+    public String getEventUrl() {
+        return eventUrl;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setEventUrl(String eventUrl) {
+        this.eventUrl = eventUrl;
     }
 
     public String getDescription() {
