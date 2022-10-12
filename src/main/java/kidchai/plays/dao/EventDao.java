@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class EventDAO {
-    List<Event> events;
+public class EventDao {
+    private List<Event> events;
 
-    {
+    public List<Event> getEvents() {
         WebScraper webScraper = new WebScraper();
         events = new ArrayList<>();
         events = webScraper.getEventList();
-    }
 
-    public List<Event> index() {
         return events;
     }
 }

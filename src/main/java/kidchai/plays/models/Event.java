@@ -1,9 +1,9 @@
 package kidchai.plays.models;
 
 public class Event {
-    private String imageURL;
+    private String imageUrl;
     private String title;
-    private String theatreName;
+    private String theatre;
     private String genres;
     private String earliestDate;
     private String latestDate;
@@ -50,12 +50,12 @@ public class Event {
         this.genres = genres;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getTitle() {
@@ -66,11 +66,11 @@ public class Event {
         this.title = title;
     }
 
-    public String getTheatreName() {
-        return theatreName;
+    public String getTheatre() {
+        return theatre;
     }
 
-    public void setTheatreName(String theatreName) {
-        this.theatreName = theatreName;
+    public void setTheatre(String theatre) {
+        this.theatre = theatre;
     }
 }

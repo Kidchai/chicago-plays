@@ -21,7 +21,7 @@
         <tbody>
         <tr th:each="event : ${events}">
             <td><span th:text="${event.getTitle()}"> Title </span></td>
-            <td><span th:text="${event.getTheatreName()}"> Theatre </span></td>
+            <td><span th:text="${event.getTheatre()}"> Theatre </span></td>
             <td><span th:text="${event.getGenres()}"> Genres </span></td>
             <td><span th:text="${event.getDescription()}"> Description </span></td>
         </tr>
