@@ -20,7 +20,7 @@ public class WebScraper {
         client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
-        searchUrl = "https://chicagoplays.com/find-a-show/?vemsearch%5Blisting%5D=1366&vemsearch%5Bkeyword%5D=&vemsearch%5Bstart%5D=10%2F10%2F2022&vemsearch%5Bend%5D=10%2F27%2F2022&vemsearch%5Bgenre%5D=0&vemsearch%5Bneighborhood%5D=0&vemsearch%5Btheatre%5D=0&p1366=1";
+        searchUrl = "https://chicagoplays.com/find-a-show/?vemsearch%5Blisting%5D=1614&vemsearch%5Bstart%5D=&vemsearch%5Bend%5D=";
         eventList = new ArrayList<>();
     }
 
