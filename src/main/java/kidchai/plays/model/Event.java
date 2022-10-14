@@ -9,6 +9,7 @@ public class Event {
     private String latestDate;
     private String description;
     private String eventUrl;
+    private String price;
 
     public String getEarliestDate() {
         return earliestDate;
@@ -72,5 +73,13 @@ public class Event {
 
     public void setTheatre(String theatre) {
         this.theatre = theatre;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

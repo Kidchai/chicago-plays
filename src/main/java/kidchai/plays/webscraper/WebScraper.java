@@ -81,9 +81,17 @@ public class WebScraper {
         var descriptionValue = description == null ? null : description.getTextContent();
         event.setDescription(descriptionValue);
 
-        var details = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
-        var detailsValue = details == null ? null : details.getAttribute("href");
-        event.setEventUrl(detailsValue);
+        var eventUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
+        var eventUrlValue = eventUrl == null ? null : eventUrl.getAttribute("href");
+        event.setEventUrl(eventUrlValue);
+
+        var price = (DomElement) eventNode.querySelector(".vem-occurrences");
+        if (price != null) {
+            price = (DomElement) price.getFirstChild().querySelector(".vem-single-event-date-ticket-pricing");
+        }
+        var priceValue = price == null ? null : price.getTextContent();
+        event.setPrice(priceValue);
+        System.out.println("Price is" + priceValue);
 
         return event;
     }
