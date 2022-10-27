@@ -9,7 +9,6 @@ import java.util.List;
 
 @Component
 public class EventDao {
-
     public List<Event> getEvents() {
         WebScraper webScraper = new WebScraper();
         List<Event> events = new ArrayList<>();

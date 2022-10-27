@@ -20,9 +20,11 @@
     <thead>
     <tr>
         <th>Title</th>
+        <th>Runs</th>
+        <th>Next show is</th>
         <th>Theatre</th>
         <th>Genres</th>
-        <th>Price starts from</th>
+        <th>Price</th>
         <th>Description</th>
     </tr>
     </thead>
@@ -31,9 +33,11 @@
         <td>
             <a th:href="${event.eventUrl}" th:text="${event.title}" target="_blank">url</a>
         </td>
+        <td><span th:text="${event.dates}"> Runs </span></td>
+        <td><span th:text="${event.nextShow}"> Next show </span></td>
         <td><span th:text="${event.theatre}"> Theatre </span></td>
         <td><span th:text="${event.genres}"> Genres </span></td>
-        <td><span th:text="${event.price}"> Price starts from </span> </td>
+        <td><span th:text="${event.price}"> Prices </span> </td>
         <td><span th:text="${event.description}"> Description </span></td>
     </tr>
     </tbody>

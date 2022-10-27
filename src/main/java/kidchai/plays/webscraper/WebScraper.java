@@ -88,10 +88,13 @@ public class WebScraper {
         var price = (DomElement) eventNode.querySelector(".vem-occurrences");
         if (price != null) {
             price = (DomElement) price.getFirstChild().querySelector(".vem-single-event-date-ticket-pricing");
-        }
+        } //убрать этот if, его тело добавить к var price
         var priceValue = price == null ? null : price.getTextContent();
         event.setPrice(priceValue);
-        System.out.println("Price is" + priceValue);
+
+        var nextShow = (DomElement) eventNode.querySelector(".vem-single-event-date-start");
+        var nextShowValue = nextShow == null ? null : nextShow.getTextContent();
+        event.setNextShow(nextShowValue);
 
         return event;
     }

@@ -10,17 +10,9 @@ public class Event {
     private String description;
     private String eventUrl;
     private String price;
-
-    public String getEarliestDate() {
-        return earliestDate;
-    }
-
+    private String nextShow;
     public void setEarliestDate(String earliestDate) {
         this.earliestDate = earliestDate;
-    }
-
-    public String getLatestDate() {
-        return latestDate;
     }
 
     public void setLatestDate(String latestDate) {
@@ -81,5 +73,17 @@ public class Event {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getDates() {
+        return String.format("%s - %s", earliestDate, latestDate);
+    }
+
+    public void setNextShow(String nextShow) {
+        this.nextShow = nextShow;
+    }
+
+    public String getNextShow() {
+        return nextShow;
     }
 }
