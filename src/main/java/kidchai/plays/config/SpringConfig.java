@@ -13,13 +13,13 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
-@ComponentScan("kidchai.plays")
+@ComponentScan("kidchai")
 @EnableWebMvc
-public class ChicagoPlaysConfig implements WebMvcConfigurer {
+public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
 
     @Autowired
-    public ChicagoPlaysConfig(ApplicationContext applicationContext) {
+    public SpringConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -44,7 +44,7 @@ public class ChicagoPlaysConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
+        resolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(resolver);
     }
-
 }
