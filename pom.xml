@@ -5,7 +5,7 @@
   <artifactId>ChicagoPlays</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>LibraryProject1copy Maven Webapp</name>
+  <name>ChicagoPlays Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
   <properties>
