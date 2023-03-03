@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/events")
 public class EventsController {
     private final EventDao eventDAO;
 
@@ -17,9 +17,15 @@ public class EventsController {
         this.eventDAO = eventDAO;
     }
 
-    @GetMapping("/events")
-    public String showEvents(Model model) {
-        model.addAttribute("events", eventDAO.getEvents());
-        return "events/events";
+    @GetMapping("/create")
+    public String create() {
+        eventDAO.getEvents();
+        return "redirect:/events/index";
+    }
+
+    @GetMapping("/index")
+    public String index(Model model) {
+        model.addAttribute("events", eventDAO.index());
+        return "events/index";
     }
 }

@@ -5,19 +5,22 @@ public class Event {
     private String title;
     private String theatre;
     private String genres;
-    private String earliestDate;
-    private String latestDate;
+
+    private String runs;
+//    private String earliestDate;
+//    private String latestDate;
     private String description;
     private String eventUrl;
     private String price;
     private String nextShow;
-    public void setEarliestDate(String earliestDate) {
-        this.earliestDate = earliestDate;
-    }
 
-    public void setLatestDate(String latestDate) {
-        this.latestDate = latestDate;
-    }
+//    public void setEarliestDate(String earliestDate) {
+//        this.earliestDate = earliestDate;
+//    }
+//
+//    public void setLatestDate(String latestDate) {
+//        this.latestDate = latestDate;
+//    }
 
     public String getEventUrl() {
         return eventUrl;
@@ -40,7 +43,7 @@ public class Event {
     }
 
     public void setGenres(String genres) {
-        this.genres = genres;
+        this.genres = genres == null ? "": genres;
     }
 
     public String getImageUrl() {
@@ -72,11 +75,15 @@ public class Event {
     }
 
     public void setPrice(String price) {
-        this.price = price;
+        this.price = price == null ? "": price;
     }
 
-    public String getDates() {
-        return String.format("%s - %s", earliestDate, latestDate);
+    public String getRuns() {
+        return runs;
+    }
+
+    public void setRuns(String runs) {
+        this.runs = runs;
     }
 
     public void setNextShow(String nextShow) {

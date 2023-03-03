@@ -74,8 +74,7 @@ public class WebScraper {
         var latestDate = dates.querySelector(".vem-latest");
         var earliestDateValue = earliestDate == null ? null : earliestDate.getTextContent();
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
-        event.setEarliestDate(earliestDateValue);
-        event.setLatestDate(latestDateValue);
+        event.setRuns(String.format("%s - %s", earliestDateValue, latestDateValue));
 
         var description = eventNode.querySelector(".vem-single-event-excerpt");
         var descriptionValue = description == null ? null : description.getTextContent();

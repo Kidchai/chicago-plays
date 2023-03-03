@@ -21,24 +21,22 @@
     <tr>
         <th>Title</th>
         <th>Runs</th>
-        <th>Next show</th>
         <th>Theatre</th>
         <th>Genres</th>
-        <th>Price</th>
         <th>Description</th>
+        <th>Price</th>
+        <th>Next show</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="event : ${events}">
-        <td>
-            <a th:href="${event.getEventUrl()}" th:text="${event.getTitle()}" target="_blank">url</a>
-        </td>
-        <td><span th:text="${event.getDates()}"> Runs </span></td>
-        <td><span th:text="${event.getNextShow()}"> Next show </span></td>
+        <td><a th:href="${event.getEventUrl()}" th:text="${event.getTitle()}" target="_blank">url</a></td>
+        <td><span th:text="${event.getRuns()}"> Runs </span></td>
         <td><span th:text="${event.getTheatre()}"> Theatre </span></td>
         <td><span th:text="${event.getGenres()}"> Genres </span></td>
-        <td><span th:text="${event.getPrice()}"> Prices </span></td>
         <td><span th:text="${event.getDescription()}"> Description </span></td>
+        <td><span th:text="${event.getPrice()}"> Prices </span></td>
+        <td><span th:text="${event.getNextShow()}"> Next show </span></td>
     </tr>
     </tbody>
 </table>
