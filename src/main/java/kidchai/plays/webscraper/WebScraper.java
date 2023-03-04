@@ -82,21 +82,30 @@ public class WebScraper {
         var earliestDateValue = earliestDate == null ? null : earliestDate.getTextContent();
         LocalDate firstDate;
         try {
-            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            var formatter = new DateTimeFormatterBuilder()
                     .appendPattern("MMM dd")
                     .parseDefaulting(ChronoField.YEAR,  LocalDate.now().getYear())
                     .toFormatter(Locale.US);
             firstDate = LocalDate.parse(earliestDateValue, formatter);
         } catch (DateTimeParseException e) {
-            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            var formatter = new DateTimeFormatterBuilder()
                     .appendPattern("MMM dd, yyyy")
                     .toFormatter(Locale.US);
             firstDate = LocalDate.parse(earliestDateValue, formatter);
         }
         event.setFirstDate(firstDate);
 
-
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
+        if (latestDateValue == null) {
+            event.setLastDate(firstDate);
+        } else {
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendPattern("MMM dd, yyyy")
+                    .toFormatter(Locale.US);
+            LocalDate lastDate = LocalDate.parse(latestDateValue, formatter);
+            event.setLastDate(lastDate);
+        }
+
         event.setRuns(String.format("%s - %s", earliestDateValue, latestDateValue));
 
         var description = eventNode.querySelector(".vem-single-event-excerpt");

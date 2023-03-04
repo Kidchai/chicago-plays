@@ -8,9 +8,7 @@ public class Event {
     private String title;
     private String theatre;
     private String genres;
-
     private LocalDate firstDate;
-
     private LocalDate lastDate;
     private String runs;
     private String description;
@@ -54,6 +52,14 @@ public class Event {
         this.firstDate = firstDate;
     }
 
+    public LocalDate getLastDate() {
+        return lastDate;
+    }
+
+    public void setLastDate(LocalDate lastDate) {
+        this.lastDate = lastDate;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -92,8 +98,16 @@ public class Event {
         return minPrice;
     }
 
+    public void setMinPrice(int minPrice) {
+        this.minPrice = minPrice;
+    }
+
     public int getMaxPrice() {
         return maxPrice;
+    }
+
+    public void setMaxPrice(int maxPrice) {
+        this.maxPrice = maxPrice;
     }
 
     public String getRuns() {

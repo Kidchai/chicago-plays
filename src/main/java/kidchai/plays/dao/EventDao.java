@@ -31,10 +31,11 @@ public class EventDao {
 
     public void save(List<Event> events) {
         for (Event event : events) {
-            jdbcTemplate.update("INSERT INTO events(title, firstDate, theatre, genres, description, eventurl, " +
-                    "minprice, maxprice, nextshow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", event.getTitle(),
-                    event.getFirstDate(), event.getTheatre(), event.getGenres(), event.getDescription(),
-                    event.getEventUrl(), event.getMinPrice(), event.getMaxPrice(), event.getNextShow());
+            jdbcTemplate.update("INSERT INTO events(title, runs, firstDate, lastDate, theatre, genres, description, " +
+                            "eventurl, minprice, maxprice, nextshow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    event.getTitle(), event.getRuns(), event.getFirstDate(), event.getLastDate(), event.getTheatre(),
+                    event.getGenres(), event.getDescription(), event.getEventUrl(), event.getMinPrice(),
+                    event.getMaxPrice(), event.getNextShow());
         }
     }
 }
