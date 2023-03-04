@@ -7,8 +7,15 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import kidchai.plays.model.Event;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class WebScraper {
     private final List<Event> eventList;
@@ -73,6 +80,22 @@ public class WebScraper {
         var earliestDate = dates.querySelector(".vem-earliest");
         var latestDate = dates.querySelector(".vem-latest");
         var earliestDateValue = earliestDate == null ? null : earliestDate.getTextContent();
+        LocalDate firstDate;
+        try {
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendPattern("MMM dd")
+                    .parseDefaulting(ChronoField.YEAR,  LocalDate.now().getYear())
+                    .toFormatter(Locale.US);
+            firstDate = LocalDate.parse(earliestDateValue, formatter);
+        } catch (DateTimeParseException e) {
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendPattern("MMM dd, yyyy")
+                    .toFormatter(Locale.US);
+            firstDate = LocalDate.parse(earliestDateValue, formatter);
+        }
+        event.setFirstDate(firstDate);
+
+
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
         event.setRuns(String.format("%s - %s", earliestDateValue, latestDateValue));
 

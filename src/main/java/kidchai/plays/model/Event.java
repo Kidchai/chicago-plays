@@ -1,17 +1,26 @@
 package kidchai.plays.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Event {
     private String imageUrl;
     private String title;
     private String theatre;
     private String genres;
+
+    private LocalDate firstDate;
+
+    private LocalDate lastDate;
     private String runs;
     private String description;
     private String eventUrl;
-    private String price;
     private int minPrice;
     private int maxPrice;
     private String nextShow;
+
+    public Event() {
+    }
 
     public String getEventUrl() {
         return eventUrl;
@@ -37,6 +46,14 @@ public class Event {
         this.genres = genres == null ? "" : genres;
     }
 
+    public LocalDate getFirstDate() {
+        return firstDate;
+    }
+
+    public void setFirstDate(LocalDate firstDate) {
+        this.firstDate = firstDate;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -59,10 +76,6 @@ public class Event {
 
     public void setTheatre(String theatre) {
         this.theatre = theatre;
-    }
-
-    public String getPrice() {
-        return price;
     }
 
     public void setPrice(String price) {
