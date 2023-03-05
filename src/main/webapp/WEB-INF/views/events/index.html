@@ -31,7 +31,7 @@
     <tbody>
     <tr th:each="event : ${events}">
         <td><a th:href="${event.getEventUrl()}" th:text="${event.getTitle()}" target="_blank">url</a></td>
-        <td><span th:text="${event.getRuns()}"> Runs </span></td>
+        <td><span th:text="${event.getFormattedRuns()}"> Runs </span></td>
         <td><span th:text="${event.getTheatre()}"> Theatre </span></td>
         <td><span th:text="${event.getGenres()}"> Genres </span></td>
         <td><span th:text="${event.getDescription()}"> Description </span></td>

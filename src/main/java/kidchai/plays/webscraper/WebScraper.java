@@ -106,8 +106,6 @@ public class WebScraper {
             event.setLastDate(lastDate);
         }
 
-        event.setRuns(String.format("%s - %s", earliestDateValue, latestDateValue));
-
         var description = eventNode.querySelector(".vem-single-event-excerpt");
         var descriptionValue = description == null ? null : description.getTextContent();
         event.setDescription(descriptionValue);

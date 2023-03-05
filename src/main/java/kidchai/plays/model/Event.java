@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 public class Event {
@@ -13,7 +14,6 @@ public class Event {
     private String genres;
     private LocalDate firstDate;
     private LocalDate lastDate;
-    private String runs;
     private String description;
     private String eventUrl;
     private int minPrice;
@@ -113,14 +113,6 @@ public class Event {
         this.maxPrice = maxPrice;
     }
 
-    public String getRuns() {
-        return runs;
-    }
-
-    public void setRuns(String runs) {
-        this.runs = runs;
-    }
-
     public void setNextShow(LocalDateTime nextShow) {
         this.nextShow = nextShow;
     }
@@ -134,5 +126,22 @@ public class Event {
                 .appendPattern("h:mma EEE, MMM dd, yyyy")
                 .toFormatter(Locale.US);
         return formatter.format(getNextShow());
+    }
+    
+    public String getFormattedRuns() {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("MMM dd")
+                .toFormatter(Locale.US);
+        String first;
+        try {
+            first = formatter.format(firstDate);
+        } catch (DateTimeParseException e) {
+            formatter = new DateTimeFormatterBuilder()
+                    .appendPattern("MMM dd, yyyy")
+                    .toFormatter(Locale.US);
+            first = formatter.format(firstDate);
+        }
+        String last = lastDate == null ? "" : formatter.format(lastDate);
+        return String.format("%s – %s", first, last);
     }
 }
