@@ -121,7 +121,7 @@ public class Event {
         return nextShow;
     }
 
-    public String getNextShowString() {
+    public String getFormattedNextShow() {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                 .appendPattern("h:mma EEE, MMM dd, yyyy")
                 .toFormatter(Locale.US);
@@ -143,5 +143,17 @@ public class Event {
         }
         String last = lastDate == null ? "" : formatter.format(lastDate);
         return String.format("%s – %s", first, last);
+    }
+
+    public String getFormattedPrice() {
+        String result;
+        if (minPrice == 0 && maxPrice == 0) {
+            result = "";
+        } else if (maxPrice == 0) {
+            result = String.format("from $%d", minPrice);
+        } else {
+            result = String.format("$%d - $%d", minPrice, maxPrice);
+        }
+        return result;
     }
 }
