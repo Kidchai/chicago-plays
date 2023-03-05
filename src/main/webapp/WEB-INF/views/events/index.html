@@ -36,7 +36,7 @@
         <td><span th:text="${event.getGenres()}"> Genres </span></td>
         <td><span th:text="${event.getDescription()}"> Description </span></td>
         <td><span th:text="${'$' + event.getMinPrice() + ' - $' + event.getMaxPrice()}"> Prices </span></td>
-        <td><span th:text="${event.getNextShow()}"> Next show </span></td>
+        <td><span th:text="${event.getNextShowString()}"> Next show </span></td>
     </tr>
     </tbody>
 </table>

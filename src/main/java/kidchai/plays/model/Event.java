@@ -2,6 +2,9 @@ package kidchai.plays.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Locale;
 
 public class Event {
     private String imageUrl;
@@ -15,7 +18,7 @@ public class Event {
     private String eventUrl;
     private int minPrice;
     private int maxPrice;
-    private String nextShow;
+    private LocalDateTime nextShow;
 
     public Event() {
     }
@@ -118,11 +121,18 @@ public class Event {
         this.runs = runs;
     }
 
-    public void setNextShow(String nextShow) {
+    public void setNextShow(LocalDateTime nextShow) {
         this.nextShow = nextShow;
     }
 
-    public String getNextShow() {
+    public LocalDateTime getNextShow() {
         return nextShow;
+    }
+
+    public String getNextShowString() {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("h:mma EEE, MMM dd, yyyy")
+                .toFormatter(Locale.US);
+        return formatter.format(getNextShow());
     }
 }

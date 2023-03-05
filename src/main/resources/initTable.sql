@@ -13,5 +13,5 @@ CREATE TABLE events
     eventUrl    VARCHAR,
     minPrice    INTEGER,
     maxPrice    INTEGER,
-    nextShow    VARCHAR
+    nextShow    TIMESTAMP
 );

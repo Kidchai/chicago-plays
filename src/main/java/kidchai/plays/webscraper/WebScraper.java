@@ -84,7 +84,7 @@ public class WebScraper {
         try {
             var formatter = new DateTimeFormatterBuilder()
                     .appendPattern("MMM dd")
-                    .parseDefaulting(ChronoField.YEAR,  LocalDate.now().getYear())
+                    .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
                     .toFormatter(Locale.US);
             firstDate = LocalDate.parse(earliestDateValue, formatter);
         } catch (DateTimeParseException e) {
@@ -125,7 +125,12 @@ public class WebScraper {
 
         var nextShow = (DomElement) eventNode.querySelector(".vem-single-event-date-start");
         var nextShowValue = nextShow == null ? null : nextShow.getTextContent();
-        event.setNextShow(nextShowValue);
+
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("h:mma EEE, MMM dd, yyyy")
+                .toFormatter(Locale.US);
+        LocalDateTime nextShowDateTime = LocalDateTime.parse(nextShowValue, formatter);
+        event.setNextShow(nextShowDateTime);
 
         return event;
     }
