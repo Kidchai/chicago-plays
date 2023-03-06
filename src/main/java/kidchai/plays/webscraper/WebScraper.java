@@ -74,10 +74,6 @@ public class WebScraper {
 
         var genres = eventNode.querySelector(".vem-single-event-genres");
         var genresValue = genres == null ? null : genres.getTextContent();
-        if (genresValue != null) {
-            String[] genresArray = genresValue.split(", ");
-            genresSet.addAll(Arrays.asList(genresArray));
-        }
         event.setGenres(genresValue);
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");

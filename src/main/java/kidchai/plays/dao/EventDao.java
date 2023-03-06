@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class EventDao {
@@ -27,24 +26,46 @@ public class EventDao {
     public void refreshEvents() {
         jdbcTemplate.update("DELETE FROM events");
         jdbcTemplate.update("DELETE FROM genres");
+        jdbcTemplate.update("DELETE FROM genres_events");
         WebScraper webScraper = new WebScraper();
         saveEvents(webScraper.getEventList());
-        saveGenres(webScraper.getGenresSet());
+        //saveGenres(webScraper.getGenresSet());
     }
 
     private void saveEvents(List<Event> events) {
         for (Event event : events) {
-            jdbcTemplate.update("INSERT INTO events(title, firstDate, lastDate, theatre, genres, description, " +
-                            "eventurl, minprice, maxprice, nextshow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            jdbcTemplate.update("INSERT INTO events(title, first_date, last_date, theatre, genres, description, " +
+                            "event_url, min_price, max_price, nextshow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     event.getTitle(), event.getFirstDate(), event.getLastDate(), event.getTheatre(),
                     event.getGenres(), event.getDescription(), event.getEventUrl(), event.getMinPrice(),
                     event.getMaxPrice(), event.getNextShow());
+
+            int eventId = jdbcTemplate.queryForObject("SELECT id FROM events WHERE event_url=?", new Object[]{event.getEventUrl()}, Integer.class);
+
+            String[] genres;
+            if (event.getGenres() != null) {
+                genres = event.getGenres().split(", ");
+                for (String genre : genres) {
+                    int genreId = getGenreId(genre);
+                    if (genreId == 0) {
+                        jdbcTemplate.update("INSERT INTO genres(genre) VALUES(?)", genre);
+                    }
+                    if (genreId != 0) {
+                        jdbcTemplate.update("INSERT INTO genres_events(genre_id, event_id) VALUES(?,?)", genreId, eventId);
+                    }
+                }
+            }
         }
     }
 
-    private void saveGenres(Set<String> genresSet) {
-        for (String genre : genresSet) {
-            jdbcTemplate.update("INSERT INTO genres(genre) VALUES(?)", genre);
+    private int getGenreId(String genre) {
+        String sql;
+        int id = 0;
+        try {
+            sql = "SELECT id FROM genres WHERE genre=?";
+            id = jdbcTemplate.queryForObject(sql, new Object[]{genre}, Integer.class);
+        } catch (Exception ignored) {
         }
+        return id;
     }
 }
