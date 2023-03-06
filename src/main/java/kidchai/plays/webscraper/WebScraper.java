@@ -13,12 +13,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class WebScraper {
     private final List<Event> eventList;
+    private Set<String> genresSet;
     private HtmlPage page;
     WebClient client;
     String searchUrl;
@@ -29,6 +28,7 @@ public class WebScraper {
         client.getOptions().setJavaScriptEnabled(false);
         searchUrl = "https://chicagoplays.com/find-a-show/?vemsearch%5Blisting%5D=1614&vemsearch%5Bstart%5D=&vemsearch%5Bend%5D=";
         eventList = new ArrayList<>();
+        genresSet = new HashSet<>();
     }
 
     public List<Event> getEventList() {
@@ -74,6 +74,10 @@ public class WebScraper {
 
         var genres = eventNode.querySelector(".vem-single-event-genres");
         var genresValue = genres == null ? null : genres.getTextContent();
+        if (genresValue != null) {
+            String[] genresArray = genresValue.split(", ");
+            genresSet.addAll(Arrays.asList(genresArray));
+        }
         event.setGenres(genresValue);
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
@@ -144,5 +148,9 @@ public class WebScraper {
             }
         }
         return searchUrl;
+    }
+
+    public Set<String> getGenresSet() {
+        return genresSet;
     }
 }

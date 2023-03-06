@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class EventDao {
@@ -25,17 +26,25 @@ public class EventDao {
 
     public void refreshEvents() {
         jdbcTemplate.update("DELETE FROM events");
+        jdbcTemplate.update("DELETE FROM genres");
         WebScraper webScraper = new WebScraper();
-        save(webScraper.getEventList());
+        saveEvents(webScraper.getEventList());
+        saveGenres(webScraper.getGenresSet());
     }
 
-    public void save(List<Event> events) {
+    private void saveEvents(List<Event> events) {
         for (Event event : events) {
             jdbcTemplate.update("INSERT INTO events(title, firstDate, lastDate, theatre, genres, description, " +
                             "eventurl, minprice, maxprice, nextshow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     event.getTitle(), event.getFirstDate(), event.getLastDate(), event.getTheatre(),
                     event.getGenres(), event.getDescription(), event.getEventUrl(), event.getMinPrice(),
                     event.getMaxPrice(), event.getNextShow());
+        }
+    }
+
+    private void saveGenres(Set<String> genresSet) {
+        for (String genre : genresSet) {
+            jdbcTemplate.update("INSERT INTO genres(genre) VALUES(?)", genre);
         }
     }
 }
