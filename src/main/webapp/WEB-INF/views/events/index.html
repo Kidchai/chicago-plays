@@ -16,6 +16,9 @@
 </head>
 <body>
 <h3>Chicago Plays</h3>
+<form th:method="POST" th:action="@{/events/refresh}" th:object="${events}">
+    <input type="submit" value="Refresh"/>
+</form>
 <table class="table" id="events-table">
     <thead>
     <tr>

@@ -23,8 +23,8 @@ public class EventDao {
         return jdbcTemplate.query("SELECT * FROM events", new BeanPropertyRowMapper<>(Event.class));
     }
 
-    public void getEvents() {
-        jdbcTemplate.update("TRUNCATE events");
+    public void refreshEvents() {
+        jdbcTemplate.update("DELETE FROM events");
         WebScraper webScraper = new WebScraper();
         save(webScraper.getEventList());
     }
