@@ -1,6 +1,5 @@
 package kidchai.plays.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -12,8 +11,8 @@ public class Event {
     private String title;
     private String theatre;
     private String genres;
-    private LocalDate firstDate;
-    private LocalDate lastDate;
+    private LocalDateTime firstDate;
+    private LocalDateTime lastDate;
     private String description;
     private String eventUrl;
     private int minPrice;
@@ -47,19 +46,19 @@ public class Event {
         this.genres = genres == null ? "" : genres;
     }
 
-    public LocalDate getFirstDate() {
+    public LocalDateTime getFirstDate() {
         return firstDate;
     }
 
-    public void setFirstDate(LocalDate firstDate) {
+    public void setFirstDate(LocalDateTime firstDate) {
         this.firstDate = firstDate;
     }
 
-    public LocalDate getLastDate() {
+    public LocalDateTime getLastDate() {
         return lastDate;
     }
 
-    public void setLastDate(LocalDate lastDate) {
+    public void setLastDate(LocalDateTime lastDate) {
         this.lastDate = lastDate;
     }
 
@@ -127,7 +126,7 @@ public class Event {
                 .toFormatter(Locale.US);
         return formatter.format(getNextShow());
     }
-    
+
     public String getFormattedRuns() {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                 .appendPattern("MMM dd")

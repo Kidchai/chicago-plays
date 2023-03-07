@@ -25,7 +25,7 @@
         <th>Title</th>
         <th>Runs</th>
         <th>Theatre</th>
-        <th>Genres</th>
+<!--        <th>Genres</th>-->
         <th>Description</th>
         <th>Price</th>
         <th>Next show</th>
@@ -36,7 +36,7 @@
         <td><a th:href="${event.getEventUrl()}" th:text="${event.getTitle()}" target="_blank">url</a></td>
         <td><span th:text="${event.getFormattedRuns()}"> Runs </span></td>
         <td><span th:text="${event.getTheatre()}"> Theatre </span></td>
-        <td><span th:text="${event.getGenres()}"> Genres </span></td>
+<!--        <td><span th:text="${event.getGenres()}"> Genres </span></td>-->
         <td><span th:text="${event.getDescription()}"> Description </span></td>
         <td><span th:text="${event.getFormattedPrice()}"> Prices </span></td>
         <td><span th:text="${event.getFormattedNextShow()}"> Next show </span></td>

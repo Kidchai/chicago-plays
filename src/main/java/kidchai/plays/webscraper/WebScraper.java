@@ -93,17 +93,17 @@ public class WebScraper {
                     .toFormatter(Locale.US);
             firstDate = LocalDate.parse(earliestDateValue, formatter);
         }
-        event.setFirstDate(firstDate);
+        event.setFirstDate(firstDate.atStartOfDay());
 
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
         if (latestDateValue == null) {
-            event.setLastDate(firstDate);
+            event.setLastDate(firstDate.atStartOfDay());
         } else {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                     .appendPattern("MMM dd, yyyy")
                     .toFormatter(Locale.US);
             LocalDate lastDate = LocalDate.parse(latestDateValue, formatter);
-            event.setLastDate(lastDate);
+            event.setLastDate(lastDate.atStartOfDay());
         }
 
         var description = eventNode.querySelector(".vem-single-event-excerpt");

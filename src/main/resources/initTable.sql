@@ -9,7 +9,6 @@ CREATE TABLE events
     first_date  TIMESTAMP,
     last_date   TIMESTAMP,
     theatre     VARCHAR,
-    genres      VARCHAR,
     description VARCHAR,
     event_url   VARCHAR,
     min_price   INTEGER,
