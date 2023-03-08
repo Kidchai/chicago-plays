@@ -10,7 +10,7 @@ public class Event {
     private String imageUrl;
     private String title;
     private String theatre;
-    private String genres;
+    private String genre;
     private LocalDateTime firstDate;
     private LocalDateTime lastDate;
     private String description;
@@ -38,12 +38,12 @@ public class Event {
         this.description = description;
     }
 
-    public String getGenres() {
-        return genres;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setGenres(String genres) {
-        this.genres = genres == null ? "" : genres;
+    public void setGenre(String genre) {
+        this.genre = genre == null ? "" : genre;
     }
 
     public LocalDateTime getFirstDate() {

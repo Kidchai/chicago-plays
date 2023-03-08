@@ -74,7 +74,7 @@ public class WebScraper {
 
         var genres = eventNode.querySelector(".vem-single-event-genres");
         var genresValue = genres == null ? null : genres.getTextContent();
-        event.setGenres(genresValue);
+        event.setGenre(genresValue);
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
         var earliestDate = dates.querySelector(".vem-earliest");
@@ -144,9 +144,5 @@ public class WebScraper {
             }
         }
         return searchUrl;
-    }
-
-    public Set<String> getGenresSet() {
-        return genresSet;
     }
 }

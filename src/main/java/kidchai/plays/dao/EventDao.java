@@ -23,13 +23,17 @@ public class EventDao {
     }
 
     public List<Event> index() {
-        return jdbcTemplate.query("SELECT * FROM events", new BeanPropertyRowMapper<>(Event.class));
+        var SELECT_EVENTS = "SELECT title, first_date, last_date, theatre,description, event_url, min_price, max_price, nextshow, genre " +
+                "FROM events " +
+                "LEFT JOIN genres_events ON events.event_id = genres_events.event_id " +
+                "LEFT JOIN genres ON genres_events.genre_id = genres.genre_id";
+        return jdbcTemplate.query(SELECT_EVENTS, new BeanPropertyRowMapper<>(Event.class));
     }
 
     public void refreshEvents() {
-        jdbcTemplate.update("DELETE FROM events");
-        jdbcTemplate.update("DELETE FROM genres");
-        jdbcTemplate.update("DELETE FROM genres_events");
+        jdbcTemplate.update("TRUNCATE events CASCADE");
+        jdbcTemplate.update("TRUNCATE genres CASCADE");
+        jdbcTemplate.update("TRUNCATE genres_events");
         WebScraper webScraper = new WebScraper();
         saveEvents(webScraper.getEventList());
     }
@@ -41,7 +45,7 @@ public class EventDao {
             var keyHolderEvents = new GeneratedKeyHolder();
             jdbcTemplate.update(
                     connection -> {
-                        PreparedStatement ps = connection.prepareStatement(INSERT_EVENT, new String[]{"id"});
+                        PreparedStatement ps = connection.prepareStatement(INSERT_EVENT, new String[]{"event_id"});
                         ps.setString(1, event.getTitle());
                         ps.setTimestamp(2, Timestamp.valueOf(event.getFirstDate()));
                         ps.setTimestamp(3, Timestamp.valueOf(event.getLastDate()));
@@ -57,8 +61,8 @@ public class EventDao {
             var eventId = keyHolderEvents.getKey().intValue();
 
             String[] genres;
-            if (event.getGenres() != null) {
-                genres = event.getGenres().split(", ");
+            if (event.getGenre() != null) {
+                genres = event.getGenre().split(", ");
                 for (var genre : genres) {
                     var genreId = getGenreId(genre);
                     if (genreId == 0) {
@@ -66,7 +70,7 @@ public class EventDao {
                         var keyHolderGenres = new GeneratedKeyHolder();
                         jdbcTemplate.update(
                                 connection -> {
-                                    PreparedStatement ps = connection.prepareStatement(INSERT_GENRE, new String[]{"id"});
+                                    PreparedStatement ps = connection.prepareStatement(INSERT_GENRE, new String[]{"genre_id"});
                                     ps.setString(1, genre);
                                     return ps;
                                 },
@@ -86,7 +90,7 @@ public class EventDao {
         if (genre.isEmpty()) {
             return -1;
         }
-        var GET_ID = "SELECT id FROM genres WHERE genre=?";
+        var GET_ID = "SELECT genre_id FROM genres WHERE genre=?";
         int id = 0;
         try {
             id = jdbcTemplate.queryForObject(GET_ID, new Object[]{genre}, Integer.class);
