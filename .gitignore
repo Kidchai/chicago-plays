@@ -1,5 +1,5 @@
 /.idea/
 /src/resources/databace.properties
 /src/main/resources/database.properties
+/src/main/resources/hibernate.properties
 /target/
-/src/main/resources/database.properties

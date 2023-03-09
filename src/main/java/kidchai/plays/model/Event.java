@@ -1,25 +1,54 @@
 package kidchai.plays.model;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
+@Entity
+@Table(name = "events")
 public class Event {
-    private String imageUrl;
+
+    @Id
+    @Column(name = "event_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    //private String imageUrl;
+    @Column(name = "title")
     private String title;
+    @Column(name = "theatre")
     private String theatre;
-    private String genre;
-    private LocalDateTime firstDate;
-    private LocalDateTime lastDate;
+//    @Column(name = "genre")
+//    private String genre;
+//    @Column(name = "first_date")
+//    private LocalDateTime firstDate;
+//    @Column(name = "last_date")
+//    private LocalDateTime lastDate;
+    @Column(name = "description")
     private String description;
+    @Column(name = "event_url")
     private String eventUrl;
+    @Column(name = "min_price")
     private int minPrice;
+    @Column(name = "max_price")
     private int maxPrice;
-    private LocalDateTime nextShow;
+//    @Column(name = "next_show")
+//    private LocalDateTime nextShow;
 
     public Event() {
+    }
+
+    public Event(int id, String title, String theatre, String description, String eventUrl, int minPrice, int maxPrice) {
+        this.id = id;
+        this.title = title;
+        this.theatre = theatre;
+        this.description = description;
+        this.eventUrl = eventUrl;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
     }
 
     public String getEventUrl() {
@@ -38,37 +67,37 @@ public class Event {
         this.description = description;
     }
 
-    public String getGenre() {
-        return genre;
-    }
+//    public String getGenre() {
+//        return genre;
+//    }
+//
+//    public void setGenre(String genre) {
+//        this.genre = genre == null ? "" : genre;
+//    }
 
-    public void setGenre(String genre) {
-        this.genre = genre == null ? "" : genre;
-    }
+//    public LocalDateTime getFirstDate() {
+//        return firstDate;
+//    }
+//
+//    public void setFirstDate(LocalDateTime firstDate) {
+//        this.firstDate = firstDate;
+//    }
+//
+//    public LocalDateTime getLastDate() {
+//        return lastDate;
+//    }
+//
+//    public void setLastDate(LocalDateTime lastDate) {
+//        this.lastDate = lastDate;
+//    }
 
-    public LocalDateTime getFirstDate() {
-        return firstDate;
-    }
-
-    public void setFirstDate(LocalDateTime firstDate) {
-        this.firstDate = firstDate;
-    }
-
-    public LocalDateTime getLastDate() {
-        return lastDate;
-    }
-
-    public void setLastDate(LocalDateTime lastDate) {
-        this.lastDate = lastDate;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+//    public String getImageUrl() {
+//        return imageUrl;
+//    }
+//
+//    public void setImageUrl(String imageUrl) {
+//        this.imageUrl = imageUrl;
+//    }
 
     public String getTitle() {
         return title;
@@ -112,37 +141,37 @@ public class Event {
         this.maxPrice = maxPrice;
     }
 
-    public void setNextShow(LocalDateTime nextShow) {
-        this.nextShow = nextShow;
-    }
+//    public void setNextShow(LocalDateTime nextShow) {
+//        this.nextShow = nextShow;
+//    }
+//
+//    public LocalDateTime getNextShow() {
+//        return nextShow;
+//    }
 
-    public LocalDateTime getNextShow() {
-        return nextShow;
-    }
-
-    public String getFormattedNextShow() {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("h:mma EEE, MMM dd, yyyy")
-                .toFormatter(Locale.US);
-        return formatter.format(getNextShow());
-    }
-
-    public String getFormattedRuns() {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("MMM dd")
-                .toFormatter(Locale.US);
-        String first;
-        try {
-            first = formatter.format(firstDate);
-        } catch (DateTimeParseException e) {
-            formatter = new DateTimeFormatterBuilder()
-                    .appendPattern("MMM dd, yyyy")
-                    .toFormatter(Locale.US);
-            first = formatter.format(firstDate);
-        }
-        String last = lastDate == null ? "" : formatter.format(lastDate);
-        return String.format("%s – %s", first, last);
-    }
+//    public String getFormattedNextShow() {
+//        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+//                .appendPattern("h:mma EEE, MMM dd, yyyy")
+//                .toFormatter(Locale.US);
+//        return formatter.format(getNextShow());
+//    }
+//
+//    public String getFormattedRuns() {
+//        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+//                .appendPattern("MMM dd")
+//                .toFormatter(Locale.US);
+//        String first;
+//        try {
+//            first = formatter.format(firstDate);
+//        } catch (DateTimeParseException e) {
+//            formatter = new DateTimeFormatterBuilder()
+//                    .appendPattern("MMM dd, yyyy")
+//                    .toFormatter(Locale.US);
+//            first = formatter.format(firstDate);
+//        }
+//        String last = lastDate == null ? "" : formatter.format(lastDate);
+//        return String.format("%s – %s", first, last);
+//    }
 
     public String getFormattedPrice() {
         String result;

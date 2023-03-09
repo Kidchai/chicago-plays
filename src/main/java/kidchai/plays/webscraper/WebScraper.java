@@ -62,7 +62,7 @@ public class WebScraper {
         var imageUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
 
         var link = imageUrl.getAttribute("src");
-        event.setImageUrl(link);
+        //event.setImageUrl(link);
 
         var title = eventNode.querySelector(".vem-single-event-title");
         var titleValue = title == null ? null : title.getTextContent();
@@ -74,7 +74,7 @@ public class WebScraper {
 
         var genres = eventNode.querySelector(".vem-single-event-genres");
         var genresValue = genres == null ? null : genres.getTextContent();
-        event.setGenre(genresValue);
+        //event.setGenre(genresValue);
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
         var earliestDate = dates.querySelector(".vem-earliest");
@@ -93,17 +93,17 @@ public class WebScraper {
                     .toFormatter(Locale.US);
             firstDate = LocalDate.parse(earliestDateValue, formatter);
         }
-        event.setFirstDate(firstDate.atStartOfDay());
+        //event.setFirstDate(firstDate.atStartOfDay());
 
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
         if (latestDateValue == null) {
-            event.setLastDate(firstDate.atStartOfDay());
+            //event.setLastDate(firstDate.atStartOfDay());
         } else {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                     .appendPattern("MMM dd, yyyy")
                     .toFormatter(Locale.US);
             LocalDate lastDate = LocalDate.parse(latestDateValue, formatter);
-            event.setLastDate(lastDate.atStartOfDay());
+            //event.setLastDate(lastDate.atStartOfDay());
         }
 
         var description = eventNode.querySelector(".vem-single-event-excerpt");
@@ -128,7 +128,7 @@ public class WebScraper {
                 .appendPattern("h:mma EEE, MMM dd, yyyy")
                 .toFormatter(Locale.US);
         LocalDateTime nextShowDateTime = LocalDateTime.parse(nextShowValue, formatter);
-        event.setNextShow(nextShowDateTime);
+        //event.setNextShow(nextShowDateTime);
 
         return event;
     }
