@@ -18,11 +18,11 @@ public class EventsController {
         this.eventDAO = eventDAO;
     }
 
-//    @PostMapping("/refresh")
-//    public String create() {
-//        eventDAO.refreshEvents();
-//        return "redirect:/events/index";
-//    }
+    @PostMapping("/refresh")
+    public String create() {
+        eventDAO.refreshEvents();
+        return "redirect:/events/index";
+    }
 
     @GetMapping("/index")
     public String index(Model model) {

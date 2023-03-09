@@ -5,14 +5,9 @@ import kidchai.plays.webscraper.WebScraper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Component
@@ -27,40 +22,25 @@ public class EventDao {
     @Transactional(readOnly = true)
     public List<Event> index() {
         Session session = sessionFactory.getCurrentSession();
-        //var SELECT_EVENTS = "SELECT event FROM events event";
-        return session.createQuery("SELECT e FROM Event e", Event.class).getResultList();
+        return session.createQuery("select e from Event e", Event.class).getResultList();
     }
 
-//    public void refreshEvents() {
-//        jdbcTemplate.update("TRUNCATE events CASCADE");
-//        jdbcTemplate.update("TRUNCATE genres CASCADE");
-//        jdbcTemplate.update("TRUNCATE genres_events");
-//        WebScraper webScraper = new WebScraper();
-//        saveEvents(webScraper.getEventList());
-//    }
+    @Transactional
+    public void refreshEvents() {
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("delete from Event cascade").executeUpdate();
+        WebScraper webScraper = new WebScraper();
+        saveEvents(webScraper.getEventList());
+    }
 
-//    private void saveEvents(List<Event> events) {
-//        for (var event : events) {
-//            var INSERT_EVENT = "INSERT INTO events(title, first_date, last_date, theatre, description, event_url, " +
-//                    "min_price, max_price, nextshow) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//            var keyHolderEvents = new GeneratedKeyHolder();
-//            jdbcTemplate.update(
-//                    connection -> {
-//                        PreparedStatement ps = connection.prepareStatement(INSERT_EVENT, new String[]{"event_id"});
-//                        ps.setString(1, event.getTitle());
-//                        ps.setTimestamp(2, Timestamp.valueOf(event.getFirstDate()));
-//                        ps.setTimestamp(3, Timestamp.valueOf(event.getLastDate()));
-//                        ps.setString(4, event.getTheatre());
-//                        ps.setString(5, event.getDescription());
-//                        ps.setString(6, event.getEventUrl());
-//                        ps.setInt(7, event.getMinPrice());
-//                        ps.setInt(8, event.getMaxPrice());
-//                        ps.setTimestamp(9, Timestamp.valueOf(event.getNextShow()));
-//                        return ps;
-//                    },
-//                    keyHolderEvents);
-//            var eventId = keyHolderEvents.getKey().intValue();
-//
+    private void saveEvents(List<Event> events) {
+        Session session = sessionFactory.getCurrentSession();
+        for (var event : events) {
+            Event newEvent = new Event(event.getTitle(), event.getTheatre(), event.getDescription(),
+                    event.getEventUrl(), event.getMinPrice(), event.getMaxPrice());
+            var eventId = session.save(newEvent);
+            System.out.println(event.getTitle() + " event id: " + eventId);
+
 //            String[] genres;
 //            if (event.getGenre() != null) {
 //                genres = event.getGenre().split(", ");
@@ -84,17 +64,19 @@ public class EventDao {
 //                    }
 //                }
 //            }
-//        }
-//    }
+        }
+    }
 
 //    private int getGenreId(String genre) {
 //        if (genre.isEmpty()) {
 //            return -1;
 //        }
-//        var GET_ID = "SELECT genre_id FROM genres WHERE genre=?";
-//        int id = 0;
+//        var id = 0;
 //        try {
-//            id = jdbcTemplate.queryForObject(GET_ID, new Object[]{genre}, Integer.class);
+//            Session session = sessionFactory.getCurrentSession();
+//            id = (Integer) session.createQuery("select id from Genre where genre=:genre")
+//                    .setParameter("genre", genre)
+//                    .uniqueResult();
 //        } catch (Exception ignored) {
 //        }
 //        return id;
