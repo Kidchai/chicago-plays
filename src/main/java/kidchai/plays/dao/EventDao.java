@@ -36,10 +36,10 @@ public class EventDao {
     private void saveEvents(List<Event> events) {
         Session session = sessionFactory.getCurrentSession();
         for (var event : events) {
-            Event newEvent = new Event(event.getTitle(), event.getTheatre(), event.getDescription(),
-                    event.getEventUrl(), event.getMinPrice(), event.getMaxPrice());
+            Event newEvent = new Event(event.getTitle(), event.getFirstDate(), event.getLastDate(), event.getTheatre(),
+                    event.getDescription(), event.getEventUrl(), event.getImageUrl(), event.getMinPrice(), event.getMaxPrice(),
+                    event.getNextShow());
             var eventId = session.save(newEvent);
-            System.out.println(event.getTitle() + " event id: " + eventId);
 
 //            String[] genres;
 //            if (event.getGenre() != null) {

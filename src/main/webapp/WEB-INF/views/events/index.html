@@ -23,23 +23,23 @@
     <thead>
     <tr>
         <th>Title</th>
-<!--        <th>Runs</th>-->
+        <th>Runs</th>
         <th>Theatre</th>
 <!--        <th>Genres</th>-->
         <th>Description</th>
         <th>Price</th>
-<!--        <th>Next show</th>-->
+        <th>Next show</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="event : ${events}">
         <td><a th:href="${event.getEventUrl()}" th:text="${event.getTitle()}" target="_blank">url</a></td>
-<!--        <td><span th:text="${event.getFormattedRuns()}"> Runs </span></td>-->
+        <td><span th:text="${event.getFormattedRuns()}"> Runs </span></td>
         <td><span th:text="${event.getTheatre()}"> Theatre </span></td>
 <!--        <td><span th:text="${event.getGenre()}"> Genres </span></td>-->
         <td><span th:text="${event.getDescription()}"> Description </span></td>
         <td><span th:text="${event.getFormattedPrice()}"> Prices </span></td>
-<!--        <td><span th:text="${event.getFormattedNextShow()}"> Next show </span></td>-->
+        <td><span th:text="${event.getFormattedNextShow()}"> Next show </span></td>
     </tr>
     </tbody>
 </table>

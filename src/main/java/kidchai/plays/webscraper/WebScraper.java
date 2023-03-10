@@ -93,17 +93,17 @@ public class WebScraper {
                     .toFormatter(Locale.US);
             firstDate = LocalDate.parse(earliestDateValue, formatter);
         }
-        //event.setFirstDate(firstDate.atStartOfDay());
+        event.setFirstDate(firstDate.atStartOfDay());
 
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
         if (latestDateValue == null) {
-            //event.setLastDate(firstDate.atStartOfDay());
+            event.setLastDate(firstDate.atStartOfDay());
         } else {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                     .appendPattern("MMM dd, yyyy")
                     .toFormatter(Locale.US);
             LocalDate lastDate = LocalDate.parse(latestDateValue, formatter);
-            //event.setLastDate(lastDate.atStartOfDay());
+            event.setLastDate(lastDate.atStartOfDay());
         }
 
         var description = eventNode.querySelector(".vem-single-event-excerpt");
@@ -128,7 +128,7 @@ public class WebScraper {
                 .appendPattern("h:mma EEE, MMM dd, yyyy")
                 .toFormatter(Locale.US);
         LocalDateTime nextShowDateTime = LocalDateTime.parse(nextShowValue, formatter);
-        //event.setNextShow(nextShowDateTime);
+        event.setNextShow(nextShowDateTime);
 
         return event;
     }

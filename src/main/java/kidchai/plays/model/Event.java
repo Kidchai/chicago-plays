@@ -16,7 +16,8 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //private String imageUrl;
+    @Column(name = "image_url")
+    private String imageUrl;
     @Column(name = "title")
     private String title;
     @Column(name = "theatre")
@@ -41,13 +42,18 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String theatre, String description, String eventUrl, int minPrice, int maxPrice) {
+    public Event(String title, LocalDateTime firstDate, LocalDateTime lastDate, String theatre, String description,
+                 String eventUrl, String imageUrl, int minPrice, int maxPrice, LocalDateTime nextShow) {
         this.title = title;
+        this.firstDate = firstDate;
+        this.lastDate = lastDate;
         this.theatre = theatre;
         this.description = description;
         this.eventUrl = eventUrl;
+        this.imageUrl = imageUrl;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
+        this.nextShow = nextShow;
     }
 
     public String getEventUrl() {
@@ -90,13 +96,13 @@ public class Event {
         this.lastDate = lastDate;
     }
 
-//    public String getImageUrl() {
-//        return imageUrl;
-//    }
-//
-//    public void setImageUrl(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getTitle() {
         return title;

@@ -11,12 +11,11 @@ CREATE TABLE events
     theatre     varchar,
     description varchar,
     event_url   varchar,
+    image_url   varchar,
     min_price   int,
     max_price   int,
-    next_show   int
+    next_show   timestamp
 );
-
-INSERT INTO events (title, theatre, description, event_url, min_price, max_price)
 
 CREATE TABLE genres
 (
