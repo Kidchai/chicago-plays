@@ -29,47 +29,8 @@ public class EventDao {
     public void refreshEvents() {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from Event cascade").executeUpdate();
+        session.createQuery("delete from Genre cascade").executeUpdate();
         WebScraper webScraper = new WebScraper(sessionFactory);
         webScraper.saveEvents();
-    }
-
-    private void saveEvents(List<Event> events) {
-        Session session = sessionFactory.getCurrentSession();
-        for (var event : events) {
-            Event newEvent = new Event(event.getTitle(), event.getFirstDate(), event.getLastDate(), event.getTheatre(),
-                    event.getDescription(), event.getEventUrl(), event.getImageUrl(), event.getMinPrice(), event.getMaxPrice(),
-                    event.getNextShow());
-            var eventId = session.save(newEvent);
-
-//            String[] genres;
-//            if (event.getGenre() != null) {
-//                genres = event.getGenre().split(", ");
-//                for (var genre : genres) {
-//                    var genreId = getGenreId(genre);
-//                    if (genreId == 0) {
-//                        genreId = (Integer) session.save(new Genre(genre));
-//                    }
-//                    if (genreId > 0) {
-//                        var INSERT_GENRE_EVENTS = "INSERT INTO genres_events(genre_id, event_id) VALUES(?,?)";
-//                        jdbcTemplate.update(INSERT_GENRE_EVENTS, genreId, eventId);
-//                    }
-//                }
-//            }
-        }
-    }
-
-    private int getGenreId(String genre) {
-        if (genre.isEmpty()) {
-            return -1;
-        }
-        var id = 0;
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            id = (Integer) session.createQuery("select id from Genre where genre=:genre")
-                    .setParameter("genre", genre)
-                    .uniqueResult();
-        } catch (Exception ignored) {
-        }
-        return id;
     }
 }

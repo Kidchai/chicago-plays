@@ -5,8 +5,10 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import kidchai.plays.model.Event;
+import kidchai.plays.model.Genre;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -17,12 +19,11 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.*;
 
+@Component
 public class WebScraper {
-    //private final List<Event> eventList;
     private HtmlPage page;
     WebClient client;
     String searchUrl;
-
     private final SessionFactory sessionFactory;
 
     public WebScraper(SessionFactory sessionFactory) {
@@ -77,7 +78,22 @@ public class WebScraper {
 
         var genres = eventNode.querySelector(".vem-single-event-genres");
         var genresValue = genres == null ? null : genres.getTextContent();
-        //event.setGenre(genresValue);
+
+        String[] genresArray;
+        if (genresValue!= null) {
+            genresArray = genresValue.split(", ");
+            Session session = sessionFactory.getCurrentSession();
+            for (var genre : genresArray) {
+                var genreId = getGenreId(genre);
+                if (genreId == 0) {
+                    genreId = (Integer) session.save(new Genre(genre));
+                }
+//                if (genreId > 0) {
+//                    var INSERT_GENRE_EVENTS = "INSERT INTO genres_events(genre_id, event_id) VALUES(?,?)";
+//                    jdbcTemplate.update(INSERT_GENRE_EVENTS, genreId, eventId);
+//                }
+            }
+        }
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
         var earliestDate = dates.querySelector(".vem-earliest");
@@ -147,5 +163,20 @@ public class WebScraper {
             }
         }
         return searchUrl;
+    }
+
+    private int getGenreId(String genre) {
+        if (genre.isEmpty()) {
+            return -1;
+        }
+        var id = 0;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            id = (Integer) session.createQuery("select id from Genre where genre=:genre")
+                    .setParameter("genre", genre)
+                    .uniqueResult();
+        } catch (Exception ignored) {
+        }
+        return id;
     }
 }
