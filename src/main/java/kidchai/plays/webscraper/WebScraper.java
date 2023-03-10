@@ -5,6 +5,8 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import kidchai.plays.model.Event;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,22 +18,25 @@ import java.time.temporal.ChronoField;
 import java.util.*;
 
 public class WebScraper {
-    private final List<Event> eventList;
-    private Set<String> genresSet;
+    //private final List<Event> eventList;
     private HtmlPage page;
     WebClient client;
     String searchUrl;
+
+    private final SessionFactory sessionFactory;
+
+    public WebScraper(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     {
         client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
         searchUrl = "https://chicagoplays.com/find-a-show/?vemsearch%5Blisting%5D=1614&vemsearch%5Bstart%5D=&vemsearch%5Bend%5D=";
-        eventList = new ArrayList<>();
-        genresSet = new HashSet<>();
     }
 
-    public List<Event> getEventList() {
+    public void saveEvents() {
         fillEventsFromOnePage();
         var nextPage = getNextPageURL();
 
@@ -39,7 +44,6 @@ public class WebScraper {
             fillEventsFromOnePage();
             nextPage = getNextPageURL();
         }
-        return eventList;
     }
 
     private void fillEventsFromOnePage() {
@@ -48,21 +52,20 @@ public class WebScraper {
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
 
             for (var eventNode : eventsNodeList) {
-                var event = getEvent(eventNode);
-                eventList.add(event);
+                saveEvent(eventNode);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Event getEvent(DomNode eventNode) {
+    private void saveEvent(DomNode eventNode) {
         Event event = new Event();
 
         var imageUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
 
         var link = imageUrl.getAttribute("src");
-        //event.setImageUrl(link);
+        event.setImageUrl(link);
 
         var title = eventNode.querySelector(".vem-single-event-title");
         var titleValue = title == null ? null : title.getTextContent();
@@ -130,7 +133,7 @@ public class WebScraper {
         LocalDateTime nextShowDateTime = LocalDateTime.parse(nextShowValue, formatter);
         event.setNextShow(nextShowDateTime);
 
-        return event;
+        sessionFactory.getCurrentSession().save(event);
     }
 
     private String getNextPageURL() {

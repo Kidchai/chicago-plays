@@ -29,8 +29,8 @@ public class EventDao {
     public void refreshEvents() {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from Event cascade").executeUpdate();
-        WebScraper webScraper = new WebScraper();
-        saveEvents(webScraper.getEventList());
+        WebScraper webScraper = new WebScraper(sessionFactory);
+        webScraper.saveEvents();
     }
 
     private void saveEvents(List<Event> events) {
@@ -47,16 +47,7 @@ public class EventDao {
 //                for (var genre : genres) {
 //                    var genreId = getGenreId(genre);
 //                    if (genreId == 0) {
-//                        var INSERT_GENRE = "INSERT INTO genres(genre) VALUES(?)";
-//                        var keyHolderGenres = new GeneratedKeyHolder();
-//                        jdbcTemplate.update(
-//                                connection -> {
-//                                    PreparedStatement ps = connection.prepareStatement(INSERT_GENRE, new String[]{"genre_id"});
-//                                    ps.setString(1, genre);
-//                                    return ps;
-//                                },
-//                                keyHolderGenres);
-//                        genreId = keyHolderGenres.getKey().intValue();
+//                        genreId = (Integer) session.save(new Genre(genre));
 //                    }
 //                    if (genreId > 0) {
 //                        var INSERT_GENRE_EVENTS = "INSERT INTO genres_events(genre_id, event_id) VALUES(?,?)";
@@ -67,18 +58,18 @@ public class EventDao {
         }
     }
 
-//    private int getGenreId(String genre) {
-//        if (genre.isEmpty()) {
-//            return -1;
-//        }
-//        var id = 0;
-//        try {
-//            Session session = sessionFactory.getCurrentSession();
-//            id = (Integer) session.createQuery("select id from Genre where genre=:genre")
-//                    .setParameter("genre", genre)
-//                    .uniqueResult();
-//        } catch (Exception ignored) {
-//        }
-//        return id;
-//    }
+    private int getGenreId(String genre) {
+        if (genre.isEmpty()) {
+            return -1;
+        }
+        var id = 0;
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            id = (Integer) session.createQuery("select id from Genre where genre=:genre")
+                    .setParameter("genre", genre)
+                    .uniqueResult();
+        } catch (Exception ignored) {
+        }
+        return id;
+    }
 }
