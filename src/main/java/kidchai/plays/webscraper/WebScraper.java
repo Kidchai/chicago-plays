@@ -8,6 +8,7 @@ import kidchai.plays.model.Event;
 import kidchai.plays.model.Genre;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class WebScraper {
     String searchUrl;
     private final SessionFactory sessionFactory;
 
+    @Autowired
     public WebScraper(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -49,7 +51,9 @@ public class WebScraper {
 
     private void fillEventsFromOnePage() {
         try {
+            System.out.println(searchUrl);
             page = client.getPage(searchUrl);
+            System.out.println("norm");
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
 
             for (var eventNode : eventsNodeList) {
@@ -76,24 +80,8 @@ public class WebScraper {
         var theatreValue = theatre == null ? null : theatre.getTextContent();
         event.setTheatre(theatreValue);
 
-        var genres = eventNode.querySelector(".vem-single-event-genres");
-        var genresValue = genres == null ? null : genres.getTextContent();
-
-        String[] genresArray;
-        if (genresValue!= null) {
-            genresArray = genresValue.split(", ");
-            Session session = sessionFactory.getCurrentSession();
-            for (var genre : genresArray) {
-                var genreId = getGenreId(genre);
-                if (genreId == 0) {
-                    genreId = (Integer) session.save(new Genre(genre));
-                }
-//                if (genreId > 0) {
-//                    var INSERT_GENRE_EVENTS = "INSERT INTO genres_events(genre_id, event_id) VALUES(?,?)";
-//                    jdbcTemplate.update(INSERT_GENRE_EVENTS, genreId, eventId);
-//                }
-            }
-        }
+        var genresString = eventNode.querySelector(".vem-single-event-genres");
+        var genresValue = genresString == null ? null : genresString.getTextContent();
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
         var earliestDate = dates.querySelector(".vem-earliest");
@@ -149,7 +137,28 @@ public class WebScraper {
         LocalDateTime nextShowDateTime = LocalDateTime.parse(nextShowValue, formatter);
         event.setNextShow(nextShowDateTime);
 
-        sessionFactory.getCurrentSession().save(event);
+        List<Genre> genres = new ArrayList<>();
+        String[] genresArray;
+        Genre thisGenre = null;
+        Session session = sessionFactory.getCurrentSession();
+        if (genresValue!= null) {
+            genresArray = genresValue.split(", ");
+            for (var genre : genresArray) {
+                var genreId = getGenreId(genre);
+                if (genreId == 0) {
+                    thisGenre = new Genre(genre);
+                    thisGenre.setEvents(new ArrayList<>(List.of(event)));
+                    genres.add(thisGenre);
+                    session.save(thisGenre);
+                    // genreId = (Integer) session.save(new Genre(genre));
+                }
+                event.setGenres(genres);
+//                if (genreId > 0) {
+//                    session.save(thisGenre);
+//                }
+            }
+        }
+        session.save(event);
     }
 
     private String getNextPageURL() {

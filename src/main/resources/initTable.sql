@@ -1,6 +1,6 @@
 DROP TABLE genres CASCADE;
 DROP TABLE events CASCADE;
-DROP TABLE IF EXISTS genres_events;
+DROP TABLE IF EXISTS events_genres;
 
 CREATE TABLE events
 (
@@ -23,9 +23,9 @@ CREATE TABLE genres
     genre    varchar UNIQUE
 );
 
-CREATE TABLE genres_events
+CREATE TABLE events_genres
 (
-    genre_id int REFERENCES genres (genre_id),
-    event_id int REFERENCES events (event_id),
-    PRIMARY KEY (genre_id, event_id)
+    event_id int REFERENCES events (event_id) ON DELETE CASCADE,
+    genre_id int REFERENCES genres (genre_id) ON DELETE CASCADE,
+    PRIMARY KEY (event_id, genre_id)
 );

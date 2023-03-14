@@ -30,6 +30,7 @@ public class EventDao {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from Event cascade").executeUpdate();
         session.createQuery("delete from Genre cascade").executeUpdate();
+        session.flush();
         WebScraper webScraper = new WebScraper(sessionFactory);
         webScraper.saveEvents();
     }

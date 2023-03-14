@@ -5,11 +5,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Locale;
 
 @Entity
 @Table(name = "events")
 public class Event {
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable (
+            name = "events_genres",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<Genre> genres;
 
     @Id
     @Column(name = "event_id")
@@ -22,8 +30,7 @@ public class Event {
     private String title;
     @Column(name = "theatre")
     private String theatre;
-//    @Column(name = "genre")
-//    private String genre;
+
     @Column(name = "first_date")
     private LocalDateTime firstDate;
     @Column(name = "last_date")
@@ -56,6 +63,9 @@ public class Event {
         this.nextShow = nextShow;
     }
 
+    public int getId() {
+        return id;
+    }
     public String getEventUrl() {
         return eventUrl;
     }
@@ -71,14 +81,6 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
-
-//    public String getGenre() {
-//        return genre;
-//    }
-//
-//    public void setGenre(String genre) {
-//        this.genre = genre == null ? "" : genre;
-//    }
 
     public LocalDateTime getFirstDate() {
         return firstDate;
@@ -152,6 +154,14 @@ public class Event {
 
     public LocalDateTime getNextShow() {
         return nextShow;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     public String getFormattedNextShow() {
