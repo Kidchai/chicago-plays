@@ -18,7 +18,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @Component
 public class WebScraper {
@@ -51,9 +53,7 @@ public class WebScraper {
 
     private void fillEventsFromOnePage() {
         try {
-            System.out.println(searchUrl);
             page = client.getPage(searchUrl);
-            System.out.println("norm");
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
 
             for (var eventNode : eventsNodeList) {
@@ -139,9 +139,9 @@ public class WebScraper {
 
         List<Genre> genres = new ArrayList<>();
         String[] genresArray;
-        Genre thisGenre = null;
+        Genre thisGenre;
         Session session = sessionFactory.getCurrentSession();
-        if (genresValue!= null) {
+        if (genresValue != null) {
             genresArray = genresValue.split(", ");
             for (var genre : genresArray) {
                 var genreId = getGenreId(genre);
@@ -150,12 +150,8 @@ public class WebScraper {
                     thisGenre.setEvents(new ArrayList<>(List.of(event)));
                     genres.add(thisGenre);
                     session.save(thisGenre);
-                    // genreId = (Integer) session.save(new Genre(genre));
                 }
                 event.setGenres(genres);
-//                if (genreId > 0) {
-//                    session.save(thisGenre);
-//                }
             }
         }
         session.save(event);

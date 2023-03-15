@@ -13,7 +13,7 @@ import java.util.Locale;
 public class Event {
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable (
+    @JoinTable(
             name = "events_genres",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
@@ -23,14 +23,12 @@ public class Event {
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(name = "image_url")
     private String imageUrl;
     @Column(name = "title")
     private String title;
     @Column(name = "theatre")
     private String theatre;
-
     @Column(name = "first_date")
     private LocalDateTime firstDate;
     @Column(name = "last_date")
@@ -66,6 +64,7 @@ public class Event {
     public int getId() {
         return id;
     }
+
     public String getEventUrl() {
         return eventUrl;
     }
@@ -156,8 +155,15 @@ public class Event {
         return nextShow;
     }
 
-    public List<Genre> getGenres() {
-        return genres;
+    public String getGenres() {
+        StringBuilder sb = new StringBuilder();
+        for (var genre : genres) {
+            sb.append(genre.getGenre()).append(", ");
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 2);
+        }
+        return sb.toString();
     }
 
     public void setGenres(List<Genre> genres) {

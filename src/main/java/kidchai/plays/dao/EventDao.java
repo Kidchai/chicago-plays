@@ -22,7 +22,8 @@ public class EventDao {
     @Transactional(readOnly = true)
     public List<Event> index() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select e from Event e", Event.class).getResultList();
+        String hql = "select distinct e from Event e left join fetch e.genres";
+        return session.createQuery(hql, Event.class).getResultList();
     }
 
     @Transactional
