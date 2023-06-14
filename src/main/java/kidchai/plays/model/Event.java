@@ -124,9 +124,14 @@ public class Event {
     public void setPrice(String price) {
         if (price != null) {
             var prices = price.replace("from ", "").replace("$", "").split(" – ");
-            minPrice = (int) Double.parseDouble(prices[0]);
-            if (prices.length > 1) {
-                maxPrice = (int) Double.parseDouble(prices[1]);
+            try {
+                minPrice = (int) Double.parseDouble(prices[0]);
+
+                if (prices.length > 1) {
+                    maxPrice = (int) Double.parseDouble(prices[1]);
+                }
+            } catch (NumberFormatException e) {
+                minPrice = 0;
             }
         }
     }
