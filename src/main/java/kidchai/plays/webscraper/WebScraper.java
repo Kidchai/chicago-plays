@@ -6,8 +6,8 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import kidchai.plays.model.Event;
 import kidchai.plays.model.Genre;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import kidchai.plays.repository.EventRepository;
+import kidchai.plays.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,14 +27,13 @@ public class WebScraper {
     private HtmlPage page;
     WebClient client;
     String searchUrl;
-    private final SessionFactory sessionFactory;
+    private final EventRepository eventRepository;
+    private final GenreRepository genreRepository;
 
     @Autowired
-    public WebScraper(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    {
+    public WebScraper(EventRepository eventRepository, GenreRepository genreRepository) {
+        this.eventRepository = eventRepository;
+        this.genreRepository = genreRepository;
         client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
@@ -140,21 +139,21 @@ public class WebScraper {
         List<Genre> genres = new ArrayList<>();
         String[] genresArray;
         Genre thisGenre;
-        Session session = sessionFactory.getCurrentSession();
+
         if (genresValue != null) {
             genresArray = genresValue.split(", ");
             for (var genre : genresArray) {
-                var genreId = getGenreId(genre);
-                if (genreId == 0) {
+                thisGenre = genreRepository.findByGenre(genre);
+                if (thisGenre == null) {
                     thisGenre = new Genre(genre);
                     thisGenre.setEvents(new ArrayList<>(List.of(event)));
                     genres.add(thisGenre);
-                    session.save(thisGenre);
+                    genreRepository.save(thisGenre);
                 }
                 event.setGenres(genres);
             }
         }
-        session.save(event);
+        eventRepository.save(event);
     }
 
     private String getNextPageURL() {
@@ -168,20 +167,5 @@ public class WebScraper {
             }
         }
         return searchUrl;
-    }
-
-    private int getGenreId(String genre) {
-        if (genre.isEmpty()) {
-            return -1;
-        }
-        var id = 0;
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            id = (Integer) session.createQuery("select id from Genre where genre=:genre")
-                    .setParameter("genre", genre)
-                    .uniqueResult();
-        } catch (Exception ignored) {
-        }
-        return id;
     }
 }

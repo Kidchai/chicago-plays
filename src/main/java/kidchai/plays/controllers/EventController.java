@@ -1,6 +1,6 @@
 package kidchai.plays.controllers;
 
-import kidchai.plays.dao.EventDao;
+import kidchai.plays.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/events")
-public class EventsController {
-    private final EventDao eventDAO;
+public class EventController {
+    private final EventService eventService;
 
     @Autowired
-    public EventsController(EventDao eventDAO) {
-        this.eventDAO = eventDAO;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
     @PostMapping("/refresh")
-    public String create() {
-        eventDAO.refreshEvents();
+    public String refreshEvents() {
+        eventService.refreshEvents();
         return "redirect:index";
     }
 
     @GetMapping("/index")
-    public String index(Model model) {
-        model.addAttribute("events", eventDAO.index());
+    public String getAllEvents(Model model) {
+        model.addAttribute("events", eventService.getAllEvents());
         return "index";
     }
 }
