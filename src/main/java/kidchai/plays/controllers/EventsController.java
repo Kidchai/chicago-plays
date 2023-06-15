@@ -21,12 +21,12 @@ public class EventsController {
     @PostMapping("/refresh")
     public String create() {
         eventDAO.refreshEvents();
-        return "redirect:/events/index";
+        return "redirect:index";
     }
 
     @GetMapping("/index")
     public String index(Model model) {
         model.addAttribute("events", eventDAO.index());
-        return "events/index";
+        return "index";
     }
 }
