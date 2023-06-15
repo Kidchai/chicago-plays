@@ -1,6 +1,6 @@
 package kidchai.plays.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -19,7 +19,6 @@ public class Genre {
     private String genre;
 
     public Genre() {
-
     }
 
     public Genre(String genre) {
