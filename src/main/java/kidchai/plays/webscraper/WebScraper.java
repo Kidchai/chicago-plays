@@ -8,19 +8,14 @@ import kidchai.plays.model.Event;
 import kidchai.plays.model.Genre;
 import kidchai.plays.repository.EventRepository;
 import kidchai.plays.repository.GenreRepository;
+import kidchai.plays.util.DateFormatterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Component
 public class WebScraper {
@@ -51,6 +46,10 @@ public class WebScraper {
     }
 
     private void fillEventsFromOnePage() {
+        if (searchUrl == null) {
+            return;
+        }
+
         try {
             page = client.getPage(searchUrl);
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
@@ -84,31 +83,18 @@ public class WebScraper {
 
         var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
         var earliestDate = dates.querySelector(".vem-earliest");
+
         var latestDate = dates.querySelector(".vem-latest");
         var earliestDateValue = earliestDate == null ? null : earliestDate.getTextContent();
-        LocalDate firstDate;
-        try {
-            var formatter = new DateTimeFormatterBuilder()
-                    .appendPattern("MMM dd")
-                    .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
-                    .toFormatter(Locale.US);
-            firstDate = LocalDate.parse(earliestDateValue, formatter);
-        } catch (DateTimeParseException e) {
-            var formatter = new DateTimeFormatterBuilder()
-                    .appendPattern("MMM dd, yyyy")
-                    .toFormatter(Locale.US);
-            firstDate = LocalDate.parse(earliestDateValue, formatter);
-        }
+
+        var firstDate = DateFormatterUtil.parseToShortFormat(earliestDateValue);
         event.setFirstDate(firstDate.atStartOfDay());
 
         var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
         if (latestDateValue == null) {
             event.setLastDate(firstDate.atStartOfDay());
         } else {
-            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                    .appendPattern("MMM dd, yyyy")
-                    .toFormatter(Locale.US);
-            LocalDate lastDate = LocalDate.parse(latestDateValue, formatter);
+            LocalDate lastDate = DateFormatterUtil.parseToLongFormat(latestDateValue);
             event.setLastDate(lastDate.atStartOfDay());
         }
 
@@ -130,10 +116,8 @@ public class WebScraper {
         var nextShow = (DomElement) eventNode.querySelector(".vem-single-event-date-start");
         var nextShowValue = nextShow == null ? null : nextShow.getTextContent();
 
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("h:mma EEE, MMM dd, yyyy")
-                .toFormatter(Locale.US);
-        LocalDateTime nextShowDateTime = LocalDateTime.parse(nextShowValue, formatter);
+        var nextShowDateTime = DateFormatterUtil.parseToLocalDateTime(nextShowValue);
+        event.setNextShow(nextShowDateTime);
         event.setNextShow(nextShowDateTime);
 
         List<Genre> genres = new ArrayList<>();

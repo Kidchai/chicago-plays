@@ -3,3 +3,6 @@
 /src/main/resources/database.properties
 /src/main/resources/hibernate.properties
 /target/
+/mvnw
+/mvnw.cmd
+/.mvn/
