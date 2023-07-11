@@ -27,15 +27,11 @@ public class DateFormatterUtil {
         return LocalDateTime.parse(dateTime, dateTimeFormatter);
     }
 
-    public static LocalDate parseToShortFormat(String date) {
+    public static LocalDate parseToDateTime(String date) {
         try {
-            return LocalDate.parse(date, shortFormatter);
-        } catch (DateTimeParseException e) {
             return LocalDate.parse(date, longFormatter);
+        } catch (DateTimeParseException e) {
+            return LocalDate.parse(date, shortFormatter);
         }
-    }
-
-    public static LocalDate parseToLongFormat(String date) {
-        return LocalDate.parse(date, longFormatter);
     }
 }

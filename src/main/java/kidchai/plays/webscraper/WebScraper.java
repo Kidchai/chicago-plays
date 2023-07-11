@@ -46,9 +46,8 @@ public class WebScraper {
     }
 
     private void fillEventsFromOnePage() {
-        if (searchUrl == null) {
+        if (searchUrl == null)
             return;
-        }
 
         try {
             page = client.getPage(searchUrl);
@@ -145,9 +144,8 @@ public class WebScraper {
     }
 
     private LocalDateTime parseToDate(String date) {
-        return DateFormatterUtil.parseToShortFormat(date).atStartOfDay();
+        return DateFormatterUtil.parseToDateTime(date).atStartOfDay();
     }
-
 
     private String getNextPageURL() {
         var nextPage = (DomElement) page.querySelector(".vem-page-next");
