@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 public class WebScraper {
     private HtmlPage page;
     WebClient client;
-    String searchUrl;
+    private String searchUrl;
     private final EventRepository eventRepository;
     private final GenreRepository genreRepository;
 
@@ -55,90 +55,99 @@ public class WebScraper {
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
 
             for (var eventNode : eventsNodeList) {
-                saveEvent(eventNode);
+                var event = getEventFromNode(eventNode);
+                saveEvent(event);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void saveEvent(DomNode eventNode) {
+    private Event getEventFromNode(DomNode eventNode) {
         Event event = new Event();
 
-        var imageUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
+        var domUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
+        var stringUrl = domUrl.getAttribute("src");
 
-        var link = imageUrl.getAttribute("src");
-        event.setImageUrl(link);
+        var domTitle = eventNode.querySelector(".vem-single-event-title");
+        var stringTitle = domTitle == null ? null : domTitle.getTextContent();
 
-        var title = eventNode.querySelector(".vem-single-event-title");
-        var titleValue = title == null ? null : title.getTextContent();
-        event.setTitle(titleValue);
+        var domTheatre = eventNode.querySelector(".vem-single-event-theatre-name");
+        var stringTheatre = domTheatre == null ? null : domTheatre.getTextContent();
 
-        var theatre = eventNode.querySelector(".vem-single-event-theatre-name");
-        var theatreValue = theatre == null ? null : theatre.getTextContent();
-        event.setTheatre(theatreValue);
+        var domGenres = eventNode.querySelector(".vem-single-event-genres");
+        var stringGenres = domGenres == null ? null : domGenres.getTextContent();
 
-        var genresString = eventNode.querySelector(".vem-single-event-genres");
-        var genresValue = genresString == null ? null : genresString.getTextContent();
+        setEventDates(eventNode, event);
 
-        var dates = eventNode.querySelector(".vem-single-event-run-dates > span");
-        var earliestDate = dates.querySelector(".vem-earliest");
+        var domDescription = eventNode.querySelector(".vem-single-event-excerpt");
+        var stringDescription = domDescription == null ? null : domDescription.getTextContent();
 
-        var latestDate = dates.querySelector(".vem-latest");
-        var earliestDateValue = earliestDate == null ? null : earliestDate.getTextContent();
+        var domEventUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
+        var stringEventUrl = domEventUrl == null ? null : domEventUrl.getAttribute("href");
 
-        var firstDate = DateFormatterUtil.parseToShortFormat(earliestDateValue);
-        event.setFirstDate(firstDate.atStartOfDay());
+        var domPrice = (DomElement) eventNode.querySelector(".vem-occurrences");
+        if (domPrice != null)
+            domPrice = (DomElement) domPrice.getFirstChild().querySelector(".vem-single-event-date-ticket-pricing");
+        var stringPrice = domPrice == null ? null : domPrice.getTextContent();
 
-        var latestDateValue = latestDate == null ? null : latestDate.getTextContent();
-        if (latestDateValue == null) {
-            event.setLastDate(firstDate.atStartOfDay());
-        } else {
-            LocalDate lastDate = DateFormatterUtil.parseToLongFormat(latestDateValue);
-            event.setLastDate(lastDate.atStartOfDay());
-        }
+        var domNextShow = (DomElement) eventNode.querySelector(".vem-single-event-date-start");
+        var stringNextShow = domNextShow == null ? null : domNextShow.getTextContent();
+        var dateNextShow = DateFormatterUtil.parseToLocalDateTime(stringNextShow);
 
-        var description = eventNode.querySelector(".vem-single-event-excerpt");
-        var descriptionValue = description == null ? null : description.getTextContent();
-        event.setDescription(descriptionValue);
+        event.setImageUrl(stringUrl);
+        event.setTitle(stringTitle);
+        event.setTheatre(stringTheatre);
+        event.setGenres(getGenresFromString(stringGenres));
 
-        var eventUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
-        var eventUrlValue = eventUrl == null ? null : eventUrl.getAttribute("href");
-        event.setEventUrl(eventUrlValue);
+        event.setDescription(stringDescription);
+        event.setEventUrl(stringEventUrl);
+        event.setPrice(stringPrice);
+        event.setNextShow(dateNextShow);
 
-        var price = (DomElement) eventNode.querySelector(".vem-occurrences");
-        if (price != null) {
-            price = (DomElement) price.getFirstChild().querySelector(".vem-single-event-date-ticket-pricing");
-        } //убрать этот if, его тело добавить к var price
-        var priceValue = price == null ? null : price.getTextContent();
-        event.setPrice(priceValue);
+        return event;
+    }
 
-        var nextShow = (DomElement) eventNode.querySelector(".vem-single-event-date-start");
-        var nextShowValue = nextShow == null ? null : nextShow.getTextContent();
+    private void saveEvent(Event event) {
+        eventRepository.save(event);
+    }
 
-        var nextShowDateTime = DateFormatterUtil.parseToLocalDateTime(nextShowValue);
-        event.setNextShow(nextShowDateTime);
-        event.setNextShow(nextShowDateTime);
-
+    private List<Genre> getGenresFromString(String stringGenres) {
         List<Genre> genres = new ArrayList<>();
         String[] genresArray;
         Genre thisGenre;
 
-        if (genresValue != null) {
-            genresArray = genresValue.split(", ");
+        if (stringGenres != null) {
+            genresArray = stringGenres.split(", ");
             for (var genre : genresArray) {
                 thisGenre = genreRepository.findByGenre(genre);
                 if (thisGenre == null) {
                     thisGenre = new Genre(genre);
-                    thisGenre.setEvents(new ArrayList<>(List.of(event)));
                     genres.add(thisGenre);
-                    genreRepository.save(thisGenre);
                 }
-                event.setGenres(genres);
             }
         }
-        eventRepository.save(event);
+        return genres;
     }
+
+    private void setEventDates(DomNode eventNode, Event event) {
+        var domDates = eventNode.querySelector(".vem-single-event-run-dates > span");
+
+        var stringFirstDate = getTextContent(domDates.querySelector(".vem-earliest"));
+        var stringLastDate = getTextContent(domDates.querySelector(".vem-latest"));
+
+        event.setFirstDate(parseToDate(stringFirstDate));
+        event.setLastDate(stringLastDate == null ? event.getFirstDate() : parseToDate(stringLastDate));
+    }
+
+    private String getTextContent(DomElement domElement) {
+        return domElement == null ? null : domElement.getTextContent();
+    }
+
+    private LocalDateTime parseToDate(String date) {
+        return DateFormatterUtil.parseToShortFormat(date).atStartOfDay();
+    }
+
 
     private String getNextPageURL() {
         var nextPage = (DomElement) page.querySelector(".vem-page-next");
