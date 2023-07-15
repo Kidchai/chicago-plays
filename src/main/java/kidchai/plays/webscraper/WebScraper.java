@@ -54,15 +54,14 @@ public class WebScraper {
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
 
             for (var eventNode : eventsNodeList) {
-                var event = getEventFromNode(eventNode);
-                saveEvent(event);
+                getEventFromNode(eventNode);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Event getEventFromNode(DomNode eventNode) {
+    private void getEventFromNode(DomNode eventNode) {
         Event event = new Event();
 
         var domUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
@@ -76,6 +75,12 @@ public class WebScraper {
 
         var domGenres = eventNode.querySelector(".vem-single-event-genres");
         var stringGenres = domGenres == null ? null : domGenres.getTextContent();
+        var genres = getGenresFromString(stringGenres);
+
+        for (Genre genre : genres) {
+            event.addGenre(genre);
+            genre.getEvents().add(event);
+        }
 
         setEventDates(eventNode, event);
 
@@ -97,18 +102,14 @@ public class WebScraper {
         event.setImageUrl(stringUrl);
         event.setTitle(stringTitle);
         event.setTheatre(stringTheatre);
-        event.setGenres(getGenresFromString(stringGenres));
 
         event.setDescription(stringDescription);
         event.setEventUrl(stringEventUrl);
         event.setPrice(stringPrice);
         event.setNextShow(dateNextShow);
 
-        return event;
-    }
-
-    private void saveEvent(Event event) {
         eventRepository.save(event);
+        genreRepository.saveAll(genres);
     }
 
     private List<Genre> getGenresFromString(String stringGenres) {
@@ -116,14 +117,14 @@ public class WebScraper {
         String[] genresArray;
         Genre thisGenre;
 
-        if (stringGenres != null) {
+        if (stringGenres.length() != 0) {
             genresArray = stringGenres.split(", ");
             for (var genre : genresArray) {
                 thisGenre = genreRepository.findByGenre(genre);
                 if (thisGenre == null) {
                     thisGenre = new Genre(genre);
-                    genres.add(thisGenre);
                 }
+                genres.add(thisGenre);
             }
         }
         return genres;

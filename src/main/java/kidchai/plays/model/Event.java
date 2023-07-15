@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,7 +19,7 @@ public class Event {
             name = "events_genres",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
     @Id
     @Column(name = "event_id")
@@ -137,6 +138,10 @@ public class Event {
         }
     }
 
+    public void addGenre(Genre genre) {
+        genres.add(genre);
+    }
+
     public int getMinPrice() {
         return minPrice;
     }
@@ -170,10 +175,6 @@ public class Event {
             sb.setLength(sb.length() - 2);
         }
         return sb.toString();
-    }
-
-    public void setGenres(List<Genre> genres) {
-        this.genres = genres;
     }
 
     public String getFormattedNextShow() {
