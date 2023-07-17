@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,24 +54,21 @@ public class WebScraper {
             var eventsNodeList = page.querySelectorAll(".vem-single-event");
 
             for (var eventNode : eventsNodeList) {
-                getEventFromNode(eventNode);
+                saveEvent(eventNode);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void getEventFromNode(DomNode eventNode) {
+    private void saveEvent(DomNode eventNode) {
         Event event = new Event();
 
         var domUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail > a").getFirstChild();
         var stringUrl = domUrl.getAttribute("src");
 
-        var domTitle = eventNode.querySelector(".vem-single-event-title");
-        var stringTitle = domTitle == null ? null : domTitle.getTextContent();
-
-        var domTheatre = eventNode.querySelector(".vem-single-event-theatre-name");
-        var stringTheatre = domTheatre == null ? null : domTheatre.getTextContent();
+        event.setTitle(getSelectorTextContent(eventNode, ".vem-single-event-title"));
+        event.setTheatre(getSelectorTextContent(eventNode, ".vem-single-event-theatre-name"));
 
         var domGenres = eventNode.querySelector(".vem-single-event-genres");
         var stringGenres = domGenres == null ? null : domGenres.getTextContent();
@@ -85,8 +81,7 @@ public class WebScraper {
 
         setEventDates(eventNode, event);
 
-        var domDescription = eventNode.querySelector(".vem-single-event-excerpt");
-        var stringDescription = domDescription == null ? null : domDescription.getTextContent();
+        event.setDescription(getSelectorTextContent(eventNode, ".vem-single-event-excerpt"));
 
         var domEventUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
         var stringEventUrl = domEventUrl == null ? null : domEventUrl.getAttribute("href");
@@ -96,18 +91,12 @@ public class WebScraper {
             domPrice = (DomElement) domPrice.getFirstChild().querySelector(".vem-single-event-date-ticket-pricing");
         var stringPrice = domPrice == null ? null : domPrice.getTextContent();
 
-        var domNextShow = (DomElement) eventNode.querySelector(".vem-single-event-date-start");
-        var stringNextShow = domNextShow == null ? null : domNextShow.getTextContent();
-        var dateNextShow = DateFormatterUtil.parseToLocalDateTime(stringNextShow);
+        var stringNextShow = getSelectorTextContent(eventNode, ".vem-single-event-date-start");
+        event.setNextShow(DateFormatterUtil.parseToLocalDateTime(stringNextShow));
 
         event.setImageUrl(stringUrl);
-        event.setTitle(stringTitle);
-        event.setTheatre(stringTheatre);
-
-        event.setDescription(stringDescription);
         event.setEventUrl(stringEventUrl);
         event.setPrice(stringPrice);
-        event.setNextShow(dateNextShow);
 
         eventRepository.save(event);
         genreRepository.saveAll(genres);
@@ -129,6 +118,11 @@ public class WebScraper {
             }
         }
         return genres;
+    }
+
+        String getSelectorTextContent(DomNode node, String selector) {
+        var domNode = node.querySelector(selector);
+        return domNode == null ? null : domNode.getTextContent();
     }
 
     private void setEventDates(DomNode eventNode, Event event) {
