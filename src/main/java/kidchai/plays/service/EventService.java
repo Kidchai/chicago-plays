@@ -29,12 +29,22 @@ public class EventService {
 
     public List<Event> getAllEvents(FilterDto filter) {
         Specification<Event> spec = Specification.where(null);
+
         if (filter.getMinPrice() != 0 && filter.getMaxPrice() != 0) {
             spec = spec.and(EventSpecifications.priceBetween(filter.getMinPrice(), filter.getMaxPrice()));
         }
 
+        if (filter.getFirstDate() != null && filter.getLastDate() != null) {
+            spec = spec.and(EventSpecifications.dateBetween(filter.getFirstDateTime(), filter.getLastDateTime()));
+        } else if (filter.getFirstDate() != null) {
+            spec = spec.and(EventSpecifications.dateFrom(filter.getFirstDateTime()));
+        } else if (filter.getLastDate() != null) {
+            spec = spec.and(EventSpecifications.dateTo(filter.getLastDateTime()));
+        }
+
         return eventRepository.getAllEventsWithGenres(spec);
     }
+
 
     @Transactional
     public void refreshEvents() {

@@ -1,9 +1,15 @@
 package kidchai.plays.dtos;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 public class FilterDto {
 
     private int minPrice;
     private int maxPrice;
+    private LocalDate firstDate;
+    private LocalDate lastDate;
 
     public int getMinPrice() {
         return minPrice;
@@ -19,5 +25,29 @@ public class FilterDto {
 
     public void setMaxPrice(int maxPrice) {
         this.maxPrice = maxPrice;
+    }
+
+    public LocalDate getFirstDate() {
+        return firstDate;
+    }
+
+    public void setFirstDate(LocalDate firstDate) {
+        this.firstDate = firstDate;
+    }
+
+    public LocalDate getLastDate() {
+        return lastDate;
+    }
+
+    public void setLastDate(LocalDate lastDate) {
+        this.lastDate = lastDate;
+    }
+
+    public LocalDateTime getFirstDateTime() {
+        return firstDate.atTime(LocalTime.MIN);
+    }
+
+    public LocalDateTime getLastDateTime() {
+        return lastDate.atTime(LocalTime.MAX);
     }
 }

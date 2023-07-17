@@ -19,12 +19,24 @@
 <form th:method="POST" th:action="@{/events/refresh}" th:object="${events}">
     <input type="submit" value="Refresh"/>
 </form>
-<h3>Price</h3>
-<form action="#" th:action="@{/events}" method="get">
-    <input type="text" th:field="${filter.minPrice}" placeholder="Min price">
-    <input type="text" th:field="${filter.maxPrice}" placeholder="Max price">
-    <button type="submit">Apply filter</button>
+
+<h3>Filter</h3>
+<form th:action="@{/events}" method="get">
+    <label for="minPrice">Price from:</label>
+    <input type="text" id="minPrice" name="minPrice" placeholder="Min price">
+
+    <label for="maxPrice">Price to:</label>
+    <input type="text" id="maxPrice" name="maxPrice" placeholder="Max price"><br/><br/>
+
+    <label for="firstDate">Start Date:</label>
+    <input type="date" id="firstDate" name="firstDate">
+
+    <label for="lastDate">End Date:</label>
+    <input type="date" id="lastDate" name="lastDate">
+
+    <button type="submit">Search</button>
 </form>
+
 <table class="table" id="events-table">
     <thead>
     <tr>
