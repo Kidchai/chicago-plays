@@ -8,7 +8,7 @@ import kidchai.plays.model.Event;
 import kidchai.plays.model.Genre;
 import kidchai.plays.repository.EventRepository;
 import kidchai.plays.repository.GenreRepository;
-import kidchai.plays.util.DateFormatterUtil;
+import kidchai.plays.webscraper.util.DateFormatterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
