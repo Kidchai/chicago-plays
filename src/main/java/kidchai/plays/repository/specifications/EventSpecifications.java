@@ -1,23 +1,27 @@
 package kidchai.plays.repository.specifications;
 
+import jakarta.persistence.criteria.Predicate;
 import kidchai.plays.model.Event;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 
 public class EventSpecifications {
-    public static Specification<Event> priceBetween(int min, int max) {
+    public static Specification<Event> priceBetween(Integer min, Integer max) {
         return (root, query, criteriaBuilder) -> {
-            var minPricePredicate = criteriaBuilder.between(root.get("minPrice"), min, max);
-            var maxPricePredicate = criteriaBuilder.between(root.get("maxPrice"), min, max);
-            var filterWithinEventPricePredicate = criteriaBuilder.and(
-                    criteriaBuilder.lessThanOrEqualTo(root.get("minPrice"), min),
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("maxPrice"), max)
-            );
+            Predicate predicate = criteriaBuilder.conjunction();
 
-            return criteriaBuilder.or(minPricePredicate, maxPricePredicate, filterWithinEventPricePredicate);
+            if (min != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.greaterThanOrEqualTo(root.get("maxPrice"), min));
+            }
+            if (max != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.lessThanOrEqualTo(root.get("minPrice"), max));
+            }
+
+            return predicate;
         };
     }
+
 
     public static Specification<Event> dateBetween(LocalDateTime firstDate, LocalDateTime lastDate) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get("firstDate"), firstDate, lastDate);

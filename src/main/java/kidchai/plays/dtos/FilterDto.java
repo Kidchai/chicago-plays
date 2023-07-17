@@ -6,24 +6,24 @@ import java.time.LocalTime;
 
 public class FilterDto {
 
-    private int minPrice;
-    private int maxPrice;
+    private Integer minPrice;
+    private Integer maxPrice;
     private LocalDate firstDate;
     private LocalDate lastDate;
 
-    public int getMinPrice() {
+    public Integer getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(int minPrice) {
+    public void setMinPrice(Integer minPrice) {
         this.minPrice = minPrice;
     }
 
-    public int getMaxPrice() {
+    public Integer getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(int maxPrice) {
+    public void setMaxPrice(Integer maxPrice) {
         this.maxPrice = maxPrice;
     }
 
