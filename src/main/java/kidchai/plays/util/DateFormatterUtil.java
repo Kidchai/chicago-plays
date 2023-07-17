@@ -27,7 +27,7 @@ public class DateFormatterUtil {
         return LocalDateTime.parse(dateTime, dateTimeFormatter);
     }
 
-    public static LocalDate parseToDateTime(String date) {
+    public static LocalDate parseToDate(String date) {
         try {
             return LocalDate.parse(date, longFormatter);
         } catch (DateTimeParseException e) {

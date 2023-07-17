@@ -2,6 +2,7 @@ package kidchai.plays.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -32,9 +33,9 @@ public class Event {
     @Column(name = "theatre")
     private String theatre;
     @Column(name = "first_date")
-    private LocalDateTime firstDate;
+    private LocalDate firstDate;
     @Column(name = "last_date")
-    private LocalDateTime lastDate;
+    private LocalDate lastDate;
     @Column(name = "description")
     private String description;
     @Column(name = "event_url")
@@ -49,7 +50,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, LocalDateTime firstDate, LocalDateTime lastDate, String theatre, String description,
+    public Event(String title, LocalDate firstDate, LocalDate lastDate, String theatre, String description,
                  String eventUrl, String imageUrl, int minPrice, int maxPrice, LocalDateTime nextShow) {
         this.title = title;
         this.firstDate = firstDate;
@@ -83,19 +84,19 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDateTime getFirstDate() {
+    public LocalDate getFirstDate() {
         return firstDate;
     }
 
-    public void setFirstDate(LocalDateTime firstDate) {
+    public void setFirstDate(LocalDate firstDate) {
         this.firstDate = firstDate;
     }
 
-    public LocalDateTime getLastDate() {
+    public LocalDate getLastDate() {
         return lastDate;
     }
 
-    public void setLastDate(LocalDateTime lastDate) {
+    public void setLastDate(LocalDate lastDate) {
         this.lastDate = lastDate;
     }
 
