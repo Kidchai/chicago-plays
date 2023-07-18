@@ -41,9 +41,9 @@ public class Event {
     @Column(name = "event_url")
     private String eventUrl;
     @Column(name = "min_price")
-    private int minPrice;
+    private Integer minPrice;
     @Column(name = "max_price")
-    private int maxPrice;
+    private Integer maxPrice;
     @Column(name = "next_show")
     private LocalDateTime nextShow;
 
@@ -129,12 +129,15 @@ public class Event {
             var prices = price.replace("from ", "").replace("$", "").split(" – ");
             try {
                 minPrice = (int) Double.parseDouble(prices[0]);
-
-                if (prices.length > 1) {
-                    maxPrice = (int) Double.parseDouble(prices[1]);
-                }
             } catch (NumberFormatException e) {
-                minPrice = 0;
+                minPrice = null;
+            }
+
+            try {
+                if (prices.length > 1)
+                    maxPrice = (int) Double.parseDouble(prices[1]);
+            } catch (NumberFormatException e) {
+                maxPrice = null;
             }
         }
     }
@@ -143,7 +146,7 @@ public class Event {
         genres.add(genre);
     }
 
-    public int getMinPrice() {
+    public Integer getMinPrice() {
         return minPrice;
     }
 
@@ -151,7 +154,7 @@ public class Event {
         this.minPrice = minPrice;
     }
 
-    public int getMaxPrice() {
+    public Integer getMaxPrice() {
         return maxPrice;
     }
 
@@ -204,9 +207,9 @@ public class Event {
 
     public String getFormattedPrice() {
         String result;
-        if (minPrice == 0 && maxPrice == 0) {
+        if (minPrice == null && maxPrice == null) {
             result = "";
-        } else if (maxPrice == 0) {
+        } else if (maxPrice == null) {
             result = String.format("from $%d", minPrice);
         } else {
             result = String.format("$%d - $%d", minPrice, maxPrice);
