@@ -28,6 +28,10 @@ public class Genre {
         this.events = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getGenre() {
         return genre;
     }

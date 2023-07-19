@@ -1,8 +1,11 @@
 package kidchai.plays.dtos;
 
+import kidchai.plays.model.Genre;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public class FilterDto {
 
@@ -10,6 +13,8 @@ public class FilterDto {
     private Integer maxPrice;
     private LocalDate firstDate;
     private LocalDate lastDate;
+
+    private List<Genre> selectedGenres;
 
     public Integer getMinPrice() {
         return minPrice;
@@ -49,5 +54,13 @@ public class FilterDto {
 
     public LocalDateTime getLastDateTime() {
         return lastDate.atTime(LocalTime.MAX);
+    }
+
+    public List<Genre> getSelectedGenres() {
+        return selectedGenres;
+    }
+
+    public void setSelectedGenres(List<Genre> selectedGenres) {
+        this.selectedGenres = selectedGenres;
     }
 }

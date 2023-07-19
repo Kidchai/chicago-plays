@@ -34,6 +34,15 @@
     <label for="lastDate">End Date:</label>
     <input type="date" id="lastDate" name="lastDate">
 
+    <ul>
+        <th:block th:each="genre : ${genres}">
+            <li>
+                <input type="checkbox" name="selectedGenres" th:value="${genre.id}" th:id="'genre-' + ${genre.id}" />
+                <label th:for="'genre-' + ${genre.getId()}" th:text="${genre.getGenre}"></label>
+            </li>
+        </th:block>
+    </ul>
+
     <button type="submit">Search</button>
 </form>
 

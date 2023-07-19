@@ -1,10 +1,13 @@
 package kidchai.plays.repository.specifications;
 
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import kidchai.plays.model.Event;
+import kidchai.plays.model.Genre;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EventSpecifications {
 
@@ -66,5 +69,18 @@ public class EventSpecifications {
                 ),
                 criteriaBuilder.lessThanOrEqualTo(root.get("lastDate"), lastDate)
         );
+    }
+
+    public static Specification<Event> withGenres(List<Genre> filterGenres) {
+        return (root, query, criteriaBuilder) -> {
+            if (filterGenres == null || filterGenres.isEmpty())
+                return criteriaBuilder.conjunction();
+
+            Join<Event, Genre> genreJoin = root.join("genres");
+
+            return genreJoin.get("genre").in(filterGenres.stream()
+                    .map(Genre::getGenre)
+                    .toList());
+        };
     }
 }

@@ -28,7 +28,9 @@ public class EventService {
     }
 
     public List<Event> getAllEvents(FilterDto filter) {
-        var spec = Specification.where(EventSpecifications.priceBetween(filter.getMinPrice(), filter.getMaxPrice()));
+        var spec = Specification
+                .where(EventSpecifications.priceBetween(filter.getMinPrice(), filter.getMaxPrice()))
+                .and(EventSpecifications.withGenres(filter.getSelectedGenres()));
 
         if (filter.getFirstDate() != null && filter.getLastDate() != null) {
             spec = spec.and(EventSpecifications.dateBetween(filter.getFirstDateTime(), filter.getLastDateTime()));
