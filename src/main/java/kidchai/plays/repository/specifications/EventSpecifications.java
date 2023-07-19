@@ -49,10 +49,22 @@ public class EventSpecifications {
     }
 
     public static Specification<Event> dateFrom(LocalDateTime firstDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("firstDate"), firstDate);
+        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
+                criteriaBuilder.and(
+                        criteriaBuilder.lessThanOrEqualTo(root.get("firstDate"), firstDate),
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("lastDate"), firstDate)
+                ),
+                criteriaBuilder.greaterThanOrEqualTo(root.get("firstDate"), firstDate)
+        );
     }
 
     public static Specification<Event> dateTo(LocalDateTime lastDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("lastDate"), lastDate);
+        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
+                criteriaBuilder.and(
+                        criteriaBuilder.lessThanOrEqualTo(root.get("firstDate"), lastDate),
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("lastDate"), lastDate)
+                ),
+                criteriaBuilder.lessThanOrEqualTo(root.get("lastDate"), lastDate)
+        );
     }
 }
