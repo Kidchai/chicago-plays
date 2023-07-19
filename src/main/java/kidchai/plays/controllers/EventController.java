@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
+
 @Controller
 @RequestMapping("/events")
 public class EventController {
@@ -34,7 +36,9 @@ public class EventController {
     public String getAllEvents(@ModelAttribute FilterDto filter, Model model) {
         model.addAttribute("events", eventService.getAllEvents(filter));
         model.addAttribute("filter", filter);
-        model.addAttribute("genres", genreRepository.findAll());
+        var genres = genreRepository.findAll();
+        Collections.sort(genres);
+        model.addAttribute("genres", genres);
         return "index";
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "genres")
-public class Genre {
+public class Genre implements Comparable<Genre> {
 
     @ManyToMany(mappedBy = "genres")
     private List<Event> events;
@@ -50,5 +50,10 @@ public class Genre {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    @Override
+    public int compareTo(Genre o) {
+        return this.getGenre().compareTo(o.getGenre());
     }
 }
