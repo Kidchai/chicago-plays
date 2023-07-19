@@ -8,3 +8,14 @@ VALUES (1, 'Event 1', '2023-07-21', '2023-07-22', 'Theatre 1', 'Description 1', 
         'http://event2.com/image.jpg', null, 75, '2023-07-23 10:00:00'),
        (3, 'Event 3', '2023-07-25', '2023-07-28', 'Theatre 3', 'Description 3', 'http://event3.com',
         'http://event3.com/image.jpg', 30, null, '2023-07-25 10:00:00');
+
+INSERT INTO genres(genre_id, genre)
+VALUES (1, 'Comedy'),
+       (2, 'Musical'),
+       (3, 'Drama');
+
+INSERT INTO events_genres(event_id, genre_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 2),
+       (3, 3);
