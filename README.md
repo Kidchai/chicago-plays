@@ -62,7 +62,7 @@ $ mvn clean install
 $ mvn spring-boot:run
 ```
 
-Now you need just open your web browser and navigate to http://localhost:8080/events (or whatever port you have set in your application properties). And push the button "Refresh" to get latest events data.
+Now you need just open your web browser and navigate to http://localhost:8080/events (or whatever port you have set in your application properties). And push the button "Refresh" to get latest events' data.
 
 If you want to run unit tests, run the:
 
