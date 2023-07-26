@@ -18,6 +18,16 @@ Pretty simple:
 
 **Requirements**
 
+- Docker
+
+If you don't have Docker, you can download it [here](https://www.docker.com/products/docker-desktop).
+
+<details>
+  <summary>In case you don't want to use Docker, check out instructions under this spoiler.
+</summary>
+
+**Requirements**
+
 - JDK 17 or newer
 - Maven
 - PostgreSQL
@@ -62,13 +72,29 @@ $ mvn clean install
 $ mvn spring-boot:run
 ```
 
-Now you need just open your web browser and navigate to http://localhost:8080/events (or whatever port you have set in your application properties). And push the button "Refresh" to get latest events' data.
+Now you need just open your web browser and navigate to http://localhost:8080/events. And push the button "Refresh" to get latest events' data.
 
 If you want to run unit tests, run the:
 
 ```bash
 $ mvn test
 ```
+</details>
+
+**1. Clone the repository and navigate to the project directory**
+
+```bash
+$ git clone https://github.com/Kidchai/chicago-plays.git
+$ cd chicago-plays
+```
+
+**2. Start the application and database using Docker**
+
+```bash
+$ docker-compose up
+```
+
+Now you need just open your web browser and navigate to http://localhost:8080/events. And push the button "Refresh" to get latest events' data.
 
 ### Stack
 
