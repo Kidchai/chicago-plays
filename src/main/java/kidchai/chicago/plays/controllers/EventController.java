@@ -1,8 +1,8 @@
-package kidchai.plays.controllers;
+package kidchai.chicago.plays.controllers;
 
-import kidchai.plays.dtos.FilterDto;
-import kidchai.plays.repository.GenreRepository;
-import kidchai.plays.service.EventService;
+import kidchai.chicago.plays.dtos.FilterDto;
+import kidchai.chicago.plays.repository.GenreRepository;
+import kidchai.chicago.plays.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

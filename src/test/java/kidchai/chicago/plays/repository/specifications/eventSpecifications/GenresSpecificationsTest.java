@@ -1,8 +1,8 @@
-package kidchai.plays.repository.specifications.eventSpecifications;
+package kidchai.chicago.plays.repository.specifications.eventSpecifications;
 
-import kidchai.plays.model.Genre;
-import kidchai.plays.repository.EventRepository;
-import kidchai.plays.repository.specifications.EventSpecifications;
+import kidchai.chicago.plays.model.Genre;
+import kidchai.chicago.plays.repository.EventRepository;
+import kidchai.chicago.plays.repository.specifications.EventSpecifications;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

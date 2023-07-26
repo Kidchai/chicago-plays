@@ -1,4 +1,4 @@
-package kidchai.plays.model;
+package kidchai.chicago.plays.model;
 
 import jakarta.persistence.*;
 

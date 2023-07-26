@@ -1,4 +1,4 @@
-package kidchai.plays.model;
+package kidchai.chicago.plays.model;
 
 import jakarta.persistence.*;
 
@@ -25,7 +25,7 @@ public class Event {
     @Id
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(name = "image_url")
     private String imageUrl;
     @Column(name = "title")
@@ -36,7 +36,7 @@ public class Event {
     private LocalDate firstDate;
     @Column(name = "last_date")
     private LocalDate lastDate;
-    @Column(name = "description")
+    @Column(name = "description", length = 4000)
     private String description;
     @Column(name = "event_url")
     private String eventUrl;

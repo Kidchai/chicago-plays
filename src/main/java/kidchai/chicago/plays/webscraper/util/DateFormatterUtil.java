@@ -1,4 +1,4 @@
-package kidchai.plays.webscraper.util;
+package kidchai.chicago.plays.webscraper.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

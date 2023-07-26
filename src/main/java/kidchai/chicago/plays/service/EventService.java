@@ -1,12 +1,12 @@
-package kidchai.plays.service;
+package kidchai.chicago.plays.service;
 
 import jakarta.transaction.Transactional;
-import kidchai.plays.dtos.FilterDto;
-import kidchai.plays.model.Event;
-import kidchai.plays.repository.EventRepository;
-import kidchai.plays.repository.GenreRepository;
-import kidchai.plays.repository.specifications.EventSpecifications;
-import kidchai.plays.webscraper.WebScraper;
+import kidchai.chicago.plays.dtos.FilterDto;
+import kidchai.chicago.plays.model.Event;
+import kidchai.chicago.plays.repository.EventRepository;
+import kidchai.chicago.plays.repository.GenreRepository;
+import kidchai.chicago.plays.repository.specifications.EventSpecifications;
+import kidchai.chicago.plays.webscraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

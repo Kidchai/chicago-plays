@@ -1,6 +1,6 @@
-package kidchai.plays.dtos;
+package kidchai.chicago.plays.dtos;
 
-import kidchai.plays.model.Genre;
+import kidchai.chicago.plays.model.Genre;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

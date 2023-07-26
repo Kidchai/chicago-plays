@@ -1,7 +1,7 @@
-package kidchai.plays.repository.specifications.eventSpecifications;
+package kidchai.chicago.plays.repository.specifications.eventSpecifications;
 
-import kidchai.plays.repository.EventRepository;
-import kidchai.plays.repository.specifications.EventSpecifications;
+import kidchai.chicago.plays.repository.EventRepository;
+import kidchai.chicago.plays.repository.specifications.EventSpecifications;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

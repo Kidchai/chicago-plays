@@ -1,4 +1,4 @@
-package kidchai.plays;
+package kidchai.chicago.plays;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class ChicagoPlaysApplication {
     public static void main(String[] args) {
         SpringApplication.run(ChicagoPlaysApplication.class, args);
     }
-
 }

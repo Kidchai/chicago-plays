@@ -1,9 +1,9 @@
-package kidchai.plays.repository.specifications;
+package kidchai.chicago.plays.repository.specifications;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
-import kidchai.plays.model.Event;
-import kidchai.plays.model.Genre;
+import kidchai.chicago.plays.model.Event;
+import kidchai.chicago.plays.model.Genre;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;

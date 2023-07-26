@@ -1,14 +1,14 @@
-package kidchai.plays.webscraper;
+package kidchai.chicago.plays.webscraper;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import kidchai.plays.model.Event;
-import kidchai.plays.model.Genre;
-import kidchai.plays.repository.EventRepository;
-import kidchai.plays.repository.GenreRepository;
-import kidchai.plays.webscraper.util.DateFormatterUtil;
+import kidchai.chicago.plays.model.Event;
+import kidchai.chicago.plays.model.Genre;
+import kidchai.chicago.plays.repository.EventRepository;
+import kidchai.chicago.plays.repository.GenreRepository;
+import kidchai.chicago.plays.webscraper.util.DateFormatterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,7 +80,6 @@ public class WebScraper {
         }
 
         setEventDates(eventNode, event);
-
         event.setDescription(getSelectorTextContent(eventNode, ".vem-single-event-excerpt"));
 
         var domEventUrl = (DomElement) eventNode.querySelector(".vem-single-event-thumbnail").getFirstChild();
@@ -107,7 +106,7 @@ public class WebScraper {
         String[] genresArray;
         Genre thisGenre;
 
-        if (stringGenres.length() != 0) {
+        if (stringGenres != null) {
             genresArray = stringGenres.split(", ");
             for (var genre : genresArray) {
                 thisGenre = genreRepository.findByGenre(genre);

@@ -1,6 +1,6 @@
-package kidchai.plays.repository;
+package kidchai.chicago.plays.repository;
 
-import kidchai.plays.model.Genre;
+import kidchai.chicago.plays.model.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
