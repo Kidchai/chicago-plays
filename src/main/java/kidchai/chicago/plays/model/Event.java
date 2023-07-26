@@ -1,6 +1,9 @@
 package kidchai.chicago.plays.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +16,9 @@ import java.util.Locale;
 
 @Entity
 @Table(name = "events")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Event {
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -47,9 +53,6 @@ public class Event {
     @Column(name = "next_show")
     private LocalDateTime nextShow;
 
-    public Event() {
-    }
-
     public Event(String title, LocalDate firstDate, LocalDate lastDate, String theatre, String description,
                  String eventUrl, String imageUrl, int minPrice, int maxPrice, LocalDateTime nextShow) {
         this.title = title;
@@ -62,66 +65,6 @@ public class Event {
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
         this.nextShow = nextShow;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getEventUrl() {
-        return eventUrl;
-    }
-
-    public void setEventUrl(String eventUrl) {
-        this.eventUrl = eventUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getFirstDate() {
-        return firstDate;
-    }
-
-    public void setFirstDate(LocalDate firstDate) {
-        this.firstDate = firstDate;
-    }
-
-    public LocalDate getLastDate() {
-        return lastDate;
-    }
-
-    public void setLastDate(LocalDate lastDate) {
-        this.lastDate = lastDate;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTheatre() {
-        return theatre;
-    }
-
-    public void setTheatre(String theatre) {
-        this.theatre = theatre;
     }
 
     public void setPrice(String price) {
@@ -144,30 +87,6 @@ public class Event {
 
     public void addGenre(Genre genre) {
         genres.add(genre);
-    }
-
-    public Integer getMinPrice() {
-        return minPrice;
-    }
-
-    public void setMinPrice(int minPrice) {
-        this.minPrice = minPrice;
-    }
-
-    public Integer getMaxPrice() {
-        return maxPrice;
-    }
-
-    public void setMaxPrice(int maxPrice) {
-        this.maxPrice = maxPrice;
-    }
-
-    public void setNextShow(LocalDateTime nextShow) {
-        this.nextShow = nextShow;
-    }
-
-    public LocalDateTime getNextShow() {
-        return nextShow;
     }
 
     public String getGenres() {

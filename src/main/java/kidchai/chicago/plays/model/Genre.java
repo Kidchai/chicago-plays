@@ -1,12 +1,18 @@
 package kidchai.chicago.plays.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "genres")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Genre implements Comparable<Genre> {
 
     @ManyToMany(mappedBy = "genres")
@@ -20,36 +26,9 @@ public class Genre implements Comparable<Genre> {
     @Column(name = "genre")
     private String genre;
 
-    public Genre() {
-    }
-
     public Genre(String genre) {
         this.genre = genre;
         this.events = new ArrayList<>();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String eventUrl) {
-        this.genre = genre;
-    }
-
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
     }
 
     @Override
