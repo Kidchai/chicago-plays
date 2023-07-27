@@ -43,6 +43,8 @@ public class EventController {
     public List<Genre> getAllGenres(@ModelAttribute FilterDto filter) {
         var genres = genreRepository.findAll();
         Collections.sort(genres);
+        for (Genre genre : genres)
+            genre.setEvents(null);
         return genres;
     }
 }

@@ -1,5 +1,7 @@
 package kidchai.chicago.plays.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,9 @@ import java.util.List;
 public class Genre implements Comparable<Genre> {
 
     @ManyToMany(mappedBy = "genres")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private List<Event> events;
 
     @Id
