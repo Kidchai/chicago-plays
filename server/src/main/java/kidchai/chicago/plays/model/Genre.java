@@ -1,5 +1,6 @@
 package kidchai.chicago.plays.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 public class Genre implements Comparable<Genre> {
 
     @ManyToMany(mappedBy = "genres")
+    @JsonIgnore
     private List<Event> events;
 
     @Id

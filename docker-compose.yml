@@ -1,9 +1,20 @@
 version: '3.4'
 
 services:
-  webapp:
+  frontend:
+    platform: linux/x86_64
     build:
-      context: .
+      context: client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8080"
+    depends_on:
+      - backend
+
+  backend:
+    platform: linux/x86_64
+    build:
+      context: server
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -25,31 +36,3 @@ services:
 
 volumes:
   pgdata:
-
-#version: '3'
-#
-#services:
-#  webapp:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/chicago_plays
-#      - SPRING_DATASOURCE_USERNAME=postgres
-#      - SPRING_DATASOURCE_PASSWORD=postgres
-#
-#  db:
-#    image: postgres:13
-#    environment:
-#      - POSTGRES_DB=chicago_plays
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#
-#volumes:
-#  pgdata:
