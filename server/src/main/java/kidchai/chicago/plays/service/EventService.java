@@ -30,19 +30,19 @@ public class EventService {
     public List<Event> getAllEvents(FilterDto filter) {
         Specification<Event> spec = Specification.where(null);
 
-        if (filter.getMinPrice() != null || filter.getMaxPrice() != null)
-            spec = spec.and(EventSpecifications.priceBetween(filter.getMinPrice(), filter.getMaxPrice()));
+        if (filter.getMin_price() != null || filter.getMax_price() != null)
+            spec = spec.and(EventSpecifications.priceBetween(filter.getMin_price(), filter.getMax_price()));
 
-        if (filter.getFirstDate() != null && filter.getLastDate() != null) {
+        if (filter.getFirst_date() != null && filter.getLast_date() != null) {
             spec = spec.and(EventSpecifications.dateBetween(filter.getFirstDateTime(), filter.getLastDateTime()));
-        } else if (filter.getFirstDate() != null) {
+        } else if (filter.getFirst_date() != null) {
             spec = spec.and(EventSpecifications.dateFrom(filter.getFirstDateTime()));
-        } else if (filter.getLastDate() != null) {
+        } else if (filter.getLast_date() != null) {
             spec = spec.and(EventSpecifications.dateTo(filter.getLastDateTime()));
         }
 
-        if (filter.getSelectedGenres() != null && !filter.getSelectedGenres().isEmpty())
-            spec = spec.and(EventSpecifications.withGenres(filter.getSelectedGenres()));
+        if (filter.getGenres() != null && !filter.getGenres().isEmpty())
+            spec = spec.and(EventSpecifications.withGenres(filter.getGenres()));
 
         return eventRepository.getAllEventsWithGenres(spec);
     }

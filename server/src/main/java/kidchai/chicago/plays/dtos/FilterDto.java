@@ -13,16 +13,16 @@ import java.util.List;
 @Setter
 public class FilterDto {
 
-    private Integer minPrice;
-    private Integer maxPrice;
-    private LocalDate firstDate;
-    private LocalDate lastDate;
-    private List<Genre> selectedGenres;
+    private Integer min_price;
+    private Integer max_price;
+    private LocalDate first_date;
+    private LocalDate last_date;
+    private List<Genre> genres;
 
     public LocalDateTime getFirstDateTime() {
-        return firstDate.atTime(LocalTime.MIN);
+        return first_date.atTime(LocalTime.MIN);
     }
     public LocalDateTime getLastDateTime() {
-        return lastDate.atTime(LocalTime.MAX);
+        return last_date.atTime(LocalTime.MAX);
     }
 }
