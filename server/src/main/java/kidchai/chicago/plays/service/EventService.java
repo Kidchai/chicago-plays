@@ -28,9 +28,10 @@ public class EventService {
     }
 
     public List<Event> getAllEvents(FilterDto filter) {
-        var spec = Specification
-                .where(EventSpecifications.priceBetween(filter.getMinPrice(), filter.getMaxPrice()))
-                .and(EventSpecifications.withGenres(filter.getSelectedGenres()));
+        Specification<Event> spec = Specification.where(null);
+
+        if (filter.getMinPrice() != null || filter.getMaxPrice() != null)
+            spec = spec.and(EventSpecifications.priceBetween(filter.getMinPrice(), filter.getMaxPrice()));
 
         if (filter.getFirstDate() != null && filter.getLastDate() != null) {
             spec = spec.and(EventSpecifications.dateBetween(filter.getFirstDateTime(), filter.getLastDateTime()));
@@ -40,9 +41,11 @@ public class EventService {
             spec = spec.and(EventSpecifications.dateTo(filter.getLastDateTime()));
         }
 
+        if (filter.getSelectedGenres() != null && !filter.getSelectedGenres().isEmpty())
+            spec = spec.and(EventSpecifications.withGenres(filter.getSelectedGenres()));
+
         return eventRepository.getAllEventsWithGenres(spec);
     }
-
 
     @Transactional
     public void refreshEvents() {
