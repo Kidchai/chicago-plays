@@ -35,6 +35,7 @@
               <span class="text-gray-500 sm:text-sm">$</span>
             </div>
             <input
+              v-model="minPrice"
               id="min-price"
               type="text"
               name="min-price"
@@ -60,6 +61,7 @@
               <span class="text-gray-500 sm:text-sm">$</span>
             </div>
             <input
+              v-model="maxPrice"
               id="max-price"
               type="text"
               name="max-price"
@@ -159,7 +161,8 @@
       <button
         type="button"
         class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-      >
+        @click="loadEvents"
+        >
         Search
       </button>
     </div>
@@ -182,12 +185,27 @@ import { ref, onMounted } from 'vue'
 
 const events = ref([])
 
-onMounted(() => {
-  fetch('http://localhost:8080/api/events')
+const minPrice = ref(null)
+const maxPrice = ref(null)
+
+const loadEvents = _ => {
+  const baseUrl = 'http://localhost:8080/api/events'
+
+  const params = {}
+  if (minPrice.value) params.min_price = minPrice.value
+  if (maxPrice.value) params.max_price = maxPrice.value
+
+  const url = baseUrl + '?' + Object.keys(params).map(key => `${key}=${encodeURIComponent(params[key])}`).join('&')
+
+  fetch(url)
     .then(response => response.json())
     .then(data => {
       events.value = data
     })
+}
+
+onMounted(() => {
+  loadEvents()
 })
 
 </script>

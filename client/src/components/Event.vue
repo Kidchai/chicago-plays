@@ -15,6 +15,15 @@
       <a
         class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
       >{{ event.genres }}</a>
+
+      <a v-if="event.minPrice"
+      class="text-gray-500"
+      >from ${{ event.minPrice }}
+    </a>
+    <a v-if="event.maxPrice"
+      class="text-gray-500"
+      >to ${{ event.maxPrice }}
+    </a>
     </div>
     <div class="group relative">
       <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
