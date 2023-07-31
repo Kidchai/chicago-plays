@@ -88,15 +88,4 @@ public class Event {
     public void addGenre(Genre genre) {
         genres.add(genre);
     }
-
-    public String getGenres() {
-        StringBuilder sb = new StringBuilder();
-        for (var genre : genres) {
-            sb.append(genre.getGenre()).append(", ");
-        }
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 2);
-        }
-        return sb.toString();
-    }
 }
