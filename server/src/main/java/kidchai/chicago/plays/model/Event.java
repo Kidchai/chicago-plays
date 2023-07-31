@@ -99,40 +99,4 @@ public class Event {
         }
         return sb.toString();
     }
-
-    public String getFormattedNextShow() {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("h:mma EEE, MMM dd, yyyy")
-                .toFormatter(Locale.US);
-        return formatter.format(getNextShow());
-    }
-
-    public String getFormattedRuns() {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("MMM dd")
-                .toFormatter(Locale.US);
-        String first;
-        try {
-            first = formatter.format(firstDate);
-        } catch (DateTimeParseException e) {
-            formatter = new DateTimeFormatterBuilder()
-                    .appendPattern("MMM dd, yyyy")
-                    .toFormatter(Locale.US);
-            first = formatter.format(firstDate);
-        }
-        String last = lastDate == null ? "" : formatter.format(lastDate);
-        return String.format("%s – %s", first, last);
-    }
-
-    public String getFormattedPrice() {
-        String result;
-        if (minPrice == null && maxPrice == null) {
-            result = "";
-        } else if (maxPrice == null) {
-            result = String.format("from $%d", minPrice);
-        } else {
-            result = String.format("$%d - $%d", minPrice, maxPrice);
-        }
-        return result;
-    }
 }
