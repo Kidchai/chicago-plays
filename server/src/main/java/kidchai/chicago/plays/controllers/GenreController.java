@@ -5,14 +5,12 @@ import kidchai.chicago.plays.model.Genre;
 import kidchai.chicago.plays.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin(maxAge = 3600)
 @Controller
 @RequestMapping("/api/genres")
 public class GenreController {
