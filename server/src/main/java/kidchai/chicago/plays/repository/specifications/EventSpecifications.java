@@ -66,4 +66,11 @@ public class EventSpecifications {
                     .toList());
         };
     }
+
+    public static Specification<Event> searchByTitleOrDescription(String search) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + search.toLowerCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), "%" + search.toLowerCase() + "%")
+        );
+    }
 }

@@ -18,6 +18,7 @@ public class FilterDto {
     private LocalDate first_date;
     private LocalDate last_date;
     private List<Genre> genres;
+    private String search;
 
     public LocalDateTime getFirstDateTime() {
         return first_date.atTime(LocalTime.MIN);

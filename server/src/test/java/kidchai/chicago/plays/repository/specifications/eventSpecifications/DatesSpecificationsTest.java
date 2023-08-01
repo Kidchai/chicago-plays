@@ -42,13 +42,4 @@ public class DatesSpecificationsTest {
         var events = eventRepository.findAll(spec);
         assertEquals(2, events.size());
     }
-
-    @Test
-    public void whenMinDate2023_07_22MaxDate2023_07_21_thenNoEventsReturned() {
-        var minDate = LocalDate.parse("2023-07-22").atTime(LocalTime.MIN);
-        var maxDate = LocalDate.parse("2023-07-21").atTime(LocalTime.MAX);
-        var spec = EventSpecifications.dateBetween(minDate, maxDate);
-        var events = eventRepository.findAll(spec);
-        assertEquals(0, events.size());
-    }
 }

@@ -52,6 +52,9 @@ public class EventService {
         if (filter.getGenres() != null && !filter.getGenres().isEmpty())
             spec = spec.and(EventSpecifications.withGenres(filter.getGenres()));
 
+        if (filter.getSearch() != null && !filter.getSearch().isBlank())
+            spec = spec.and(EventSpecifications.searchByTitleOrDescription(filter.getSearch()));
+
         return eventRepository.getAllEventsWithGenres(spec);
     }
 
