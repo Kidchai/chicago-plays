@@ -30,9 +30,15 @@ public class EventSpecifications {
         };
     }
 
-    public static Specification<Event> dateBetween(LocalDateTime firstDate, LocalDateTime lastDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get("firstDate"), firstDate, lastDate);
+    public static Specification<Event> dateBetween(LocalDateTime filterFirstDate, LocalDateTime filterLastDate) {
+        return (root, query, criteriaBuilder) -> {
+            var eventStartsBeforeFilterEnds = criteriaBuilder.lessThanOrEqualTo(root.get("firstDate"), filterLastDate);
+            var eventEndsAfterFilterStarts = criteriaBuilder.greaterThanOrEqualTo(root.get("lastDate"), filterFirstDate);
+
+            return criteriaBuilder.and(eventStartsBeforeFilterEnds, eventEndsAfterFilterStarts);
+        };
     }
+
 
     public static Specification<Event> dateFrom(LocalDateTime firstDate) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.or(

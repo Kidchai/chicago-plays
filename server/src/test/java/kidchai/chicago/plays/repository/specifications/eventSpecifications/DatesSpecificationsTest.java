@@ -19,27 +19,27 @@ public class DatesSpecificationsTest {
     private EventRepository eventRepository;
 
     @Test
-    public void whenMinDate2023_07_21MaxDate2023_07_24_thenTwoEventsReturned() {
-        var minDate = LocalDate.parse("2023-07-21").atTime(LocalTime.MIN);
-        var maxDate = LocalDate.parse("2023-07-24").atTime(LocalTime.MAX);
-        var spec = EventSpecifications.dateBetween(minDate, maxDate);
+    public void whenFirstDate2023_07_21LastDate2023_07_24_thenThreeEventsReturned() {
+        var firstDate = LocalDate.parse("2023-07-21").atTime(LocalTime.MIN);
+        var lastDate = LocalDate.parse("2023-07-24").atTime(LocalTime.MAX);
+        var spec = EventSpecifications.dateBetween(firstDate, lastDate);
         var events = eventRepository.findAll(spec);
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
     }
 
     @Test
-    public void whenMinDate2023_07_26MaxDateNull_thenTwoEventsReturned() {
-        var minDate = LocalDate.parse("2023-07-26").atTime(LocalTime.MIN);
-        var spec = EventSpecifications.dateFrom(minDate);
+    public void whenFirstDate2023_07_26LastDateNull_thenThreeEventsReturned() {
+        var firstDate = LocalDate.parse("2023-07-26").atTime(LocalTime.MIN);
+        var spec = EventSpecifications.dateFrom(firstDate);
         var events = eventRepository.findAll(spec);
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
     }
 
     @Test
-    public void whenMinDateNullMaxDate2023_07_23_thenTwoEventsReturned() {
-        var maxDate = LocalDate.parse("2023-07-23").atTime(LocalTime.MAX);
-        var spec = EventSpecifications.dateTo(maxDate);
+    public void whenFirstDateNullLastDate2023_07_23_thenThreeEventsReturned() {
+        var lastDate = LocalDate.parse("2023-07-23").atTime(LocalTime.MAX);
+        var spec = EventSpecifications.dateTo(lastDate);
         var events = eventRepository.findAll(spec);
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
     }
 }
