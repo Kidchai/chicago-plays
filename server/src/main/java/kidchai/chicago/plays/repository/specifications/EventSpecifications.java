@@ -13,11 +13,6 @@ public class EventSpecifications {
 
     public static Specification<Event> priceBetween(Integer filterMinPrice, Integer filterMaxPrice) {
         return (root, query, criteriaBuilder) -> {
-
-            if (filterMinPrice == null && filterMaxPrice == null) {
-                return criteriaBuilder.conjunction();
-            }
-
             Predicate lowerBoundPredicate;
             Predicate upperBoundPredicate;
 

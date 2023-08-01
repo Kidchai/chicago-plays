@@ -39,6 +39,9 @@ public class EventService {
         }
 
         if (filter.getFirst_date() != null && filter.getLast_date() != null) {
+            if (filter.getFirstDateTime().isAfter(filter.getLastDateTime()))
+                return List.of();
+
             spec = spec.and(EventSpecifications.dateBetween(filter.getFirstDateTime(), filter.getLastDateTime()));
         } else if (filter.getFirst_date() != null) {
             spec = spec.and(EventSpecifications.dateFrom(filter.getFirstDateTime()));
