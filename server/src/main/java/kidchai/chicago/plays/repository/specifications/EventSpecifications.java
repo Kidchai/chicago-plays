@@ -11,39 +11,27 @@ import java.util.List;
 
 public class EventSpecifications {
 
-    public static Specification<Event> priceBetween(Integer minPrice, Integer maxPrice) {
+    public static Specification<Event> priceBetween(Integer filterMinPrice, Integer filterMaxPrice) {
         return (root, query, criteriaBuilder) -> {
-            Predicate minPricePredicate;
-            Predicate maxPricePredicate;
 
-            if (minPrice == null && maxPrice == null) {
+            if (filterMinPrice == null && filterMaxPrice == null) {
                 return criteriaBuilder.conjunction();
-            } else if (minPrice == null) {
-                minPricePredicate = criteriaBuilder.conjunction();
-                maxPricePredicate = criteriaBuilder.or(
-                        criteriaBuilder.lessThanOrEqualTo(root.get("minPrice"), maxPrice),
-                        criteriaBuilder.lessThanOrEqualTo(root.get("maxPrice"), maxPrice)
-                );
-            } else if (maxPrice == null) {
-                maxPricePredicate = criteriaBuilder.conjunction();
-                minPricePredicate = criteriaBuilder.or(
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("minPrice"), minPrice),
-                        criteriaBuilder.lessThanOrEqualTo(root.get("maxPrice"), minPrice)
-                );
-            } else {
-                Predicate lowerBoundPredicate = criteriaBuilder.or(
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("minPrice"), minPrice),
-                        criteriaBuilder.lessThanOrEqualTo(root.get("maxPrice"), minPrice)
-                );
-                Predicate upperBoundPredicate = criteriaBuilder.or(
-                        criteriaBuilder.lessThanOrEqualTo(root.get("minPrice"), maxPrice),
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("maxPrice"), maxPrice)
-                );
-
-                return criteriaBuilder.and(lowerBoundPredicate, upperBoundPredicate);
             }
 
-            return criteriaBuilder.and(minPricePredicate, maxPricePredicate);
+            Predicate lowerBoundPredicate;
+            Predicate upperBoundPredicate;
+
+            lowerBoundPredicate = criteriaBuilder.lessThanOrEqualTo(
+                    criteriaBuilder.coalesce(root.get("minPrice"), root.get("maxPrice")),
+                    filterMaxPrice
+            );
+
+            upperBoundPredicate = criteriaBuilder.greaterThanOrEqualTo(
+                    criteriaBuilder.coalesce(root.get("maxPrice"), root.get("minPrice")),
+                    filterMinPrice
+            );
+
+            return criteriaBuilder.and(lowerBoundPredicate, upperBoundPredicate);
         };
     }
 

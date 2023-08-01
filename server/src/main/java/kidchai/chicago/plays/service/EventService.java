@@ -29,9 +29,14 @@ public class EventService {
 
     public List<Event> getAllEvents(FilterDto filter) {
         Specification<Event> spec = Specification.where(null);
-
-        if (filter.getMin_price() != null || filter.getMax_price() != null)
+        var defaultMinPrice = 0;
+        if (filter.getMin_price() != null && filter.getMax_price() != null) {
             spec = spec.and(EventSpecifications.priceBetween(filter.getMin_price(), filter.getMax_price()));
+        } else if (filter.getMin_price() != null) {
+            spec = spec.and(EventSpecifications.priceBetween(filter.getMin_price(), filter.getMin_price()));
+        } else if (filter.getMax_price() != null) {
+            spec = spec.and(EventSpecifications.priceBetween(defaultMinPrice, filter.getMax_price()));
+        }
 
         if (filter.getFirst_date() != null && filter.getLast_date() != null) {
             spec = spec.and(EventSpecifications.dateBetween(filter.getFirstDateTime(), filter.getLastDateTime()));

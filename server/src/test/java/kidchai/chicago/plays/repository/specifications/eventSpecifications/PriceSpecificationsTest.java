@@ -19,26 +19,23 @@ class PriceSpecificationsTest {
     private EventRepository eventRepository;
 
     @Test
-    @DisplayName("Returns 2 events with price >= minPrice and price <= maxPrice")
-    public void whenMinPrice20MaxPrice30_thenOneEventReturned() {
+    public void whenMinPrice20MaxPrice30_thenTwoEventsReturned() {
         Specification<Event> spec = EventSpecifications.priceBetween(20, 30);
         List<Event> events = eventRepository.findAll(spec);
         assertEquals(2, events.size());
     }
 
     @Test
-    @DisplayName("Returns 2 events with price >= minPrice")
-    public void whenMinPrice20MaxPriceNull_thenTwoEventsReturned() {
-        Specification<Event> spec = EventSpecifications.priceBetween(20, null);
+    public void whenMinPrice50MaxPrice50_thenOneEventReturned() {
+        Specification<Event> spec = EventSpecifications.priceBetween(50, 50);
         List<Event> events = eventRepository.findAll(spec);
-        assertEquals(2, events.size());
+        assertEquals(1, events.size());
     }
 
     @Test
-    @DisplayName("Returns 2 events with price <= maxPrice")
-    public void whenMinPriceNullMaxPrice30_thenTwoEventReturned() {
-        Specification<Event> spec = EventSpecifications.priceBetween(null, 30);
+    public void whenMinPriceNullMaxPriceNull_thenAllEventsReturned() {
+        Specification<Event> spec = EventSpecifications.priceBetween(null, null);
         List<Event> events = eventRepository.findAll(spec);
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
     }
 }
