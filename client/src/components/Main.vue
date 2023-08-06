@@ -90,6 +90,18 @@
         </div>
       </div>
     </FilterFieldset>
+    <FilterFieldset label="Genre">
+      <div class="space-y-5 ml-1">
+        <div v-for="genre in genres" :key="genre.id" class="relative flex items-start">
+          <div class="flex h-6 items-center">
+            <input type="checkbox" v-model="genre.selected" @change="loadEvents" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+          </div>
+          <div class="ml-3 text-sm leading-6">
+            <label for="comments" class="font-medium text-gray-900">{{ genre.genre }}</label>
+          </div>
+        </div>
+      </div>
+    </FilterFieldset>
 
     <div class="mt-5">
       <button
@@ -130,6 +142,12 @@ const filters = {
 }
 
 const loadEvents = _ => {
+  filters.genres =
+    genres.value.
+      filter(genre => genre.selected).
+      map(genre => genre.id).
+      join(',')
+
   const baseUrl = 'http://localhost:8080/api/events'
 
   const url = baseUrl + '?' + Object.keys(filters).filter(key => filters[key]).map(key => `${key}=${encodeURIComponent(filters[key])}`).join('&')
@@ -141,7 +159,18 @@ const loadEvents = _ => {
     })
 }
 
+const loadGenres = _ => {
+  const url = 'http://localhost:8080/api/genres'
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      genres.value = data
+    })
+}
+
 onMounted(() => {
+  loadGenres()
   loadEvents()
 })
 
