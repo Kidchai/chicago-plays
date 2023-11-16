@@ -23,10 +23,10 @@ spec:
               secretKeyRef:
                 name: chicago-plays-db-secret
                 key: SPRING_DATASOURCE_PASSWORD
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://db:5432/chicago-plays
-            - name: SPRING_DATASOURCE_USERNAME
-              value: postgres
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:postgresql://db:5432/chicago-plays
+          - name: SPRING_DATASOURCE_USERNAME
+            value: postgres
           image: backend
           name: backend
           ports:

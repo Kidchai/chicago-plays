@@ -21,7 +21,7 @@ aws eks --region $REGION update-kubeconfig --name chicago-plays
 
 kubectl create secret generic chicago-plays-db-secret --from-literal=SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD
 
-kubectl apply -f frontend-service.yaml,frontend-deployment.yaml,backend-service.yaml,backend-deployment.yaml,db-service.yaml,db-deployment.yaml
+kubectl apply -f frontend-service.yaml,frontend-deployment.yaml,backend-service.yaml,backend-deployment.yaml
 
 # Status:
 # kubectl get deployments
