@@ -53,7 +53,6 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ secrets.IMAGE_TAG }}
       run: |
         kubectl set image deployment/backend backend=$ECR_REGISTRY/$ECR_REPOSITORY:chicago-plays-backend --record
         kubectl rollout status deployment/backend
@@ -62,7 +61,6 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ secrets.IMAGE_TAG }}
       run: |
         kubectl set image deployment/frontend backend=$ECR_REGISTRY/$ECR_REPOSITORY:chicago-plays-frontend --record
         kubectl rollout status deployment/frontend
