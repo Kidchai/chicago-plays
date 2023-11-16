@@ -8,12 +8,11 @@ aws ecr create-repository --repository-name chicago-plays --region $REGION
 
 aws rds create-db-instance \
     --db-instance-identifier chicago-plays-db \
-    --db-instance-class db.t2.micro \
+    --db-instance-class db.t3.micro \
     --engine postgres \
-    --allocated-storage 1 \
+    --allocated-storage 20 \
     --master-username postgres \
     --master-user-password $DB_PASSWORD \
-    --backup-retention-period 1 \
     --no-publicly-accessible
 
 eksctl create cluster --name chicago-plays --region $REGION --nodegroup-name standard-workers --node-type t2.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
