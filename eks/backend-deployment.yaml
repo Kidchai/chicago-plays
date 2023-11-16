@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.service: backend
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.service: backend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.network/chicago-plays-default: "true"
+        io.service: backend
+    spec:
+      containers:
+        - env:
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: chicago-plays-db-secret
+                key: SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://db:5432/chicago-plays
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+          image: backend
+          name: backend
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
