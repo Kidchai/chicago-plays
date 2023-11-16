@@ -63,5 +63,5 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       run: |
-        kubectl set image deployment/frontend backend=$ECR_REGISTRY/$ECR_REPOSITORY:chicago-plays-frontend --record
+        kubectl set image deployment/frontend frontend=$ECR_REGISTRY/$ECR_REPOSITORY:chicago-plays-frontend --record
         kubectl rollout status deployment/frontend
