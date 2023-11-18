@@ -35,20 +35,18 @@ jobs:
             - 'frontend/**'
 
     - name: Build, tag, and push backend image to Amazon ECR
-      if: steps.filter.outputs.backend == 'true'
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        docker build -t $ECR_REGISTRY/chicago-plays-backend backend
-        docker push $ECR_REGISTRY/chicago-plays-backend:latest
+        docker build -t $ECR_REGISTRY/chicago-plays-backend:$GITHUB_SHA backend
+        docker push $ECR_REGISTRY/chicago-plays-backend:$GITHUB_SHA
 
     - name: Build, tag, and push frontend image to Amazon ECR
-      if: steps.filter.outputs.frontend == 'true'
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        docker build -t $ECR_REGISTRY/chicago-plays-frontend frontend
-        docker push $ECR_REGISTRY/chicago-plays-frontend:latest
+        docker build -t $ECR_REGISTRY/chicago-plays-frontend:$GITHUB_SHA frontend
+        docker push $ECR_REGISTRY/chicago-plays-frontend:$GITHUB_SHA
 
     - name: Set up Kubectl
       uses: azure/setup-kubectl@v3
@@ -63,12 +61,12 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        kubectl set image deployment/backend backend=$ECR_REGISTRY/chicago-plays-backend:latest --record
+        kubectl set image deployment/backend backend=$ECR_REGISTRY/chicago-plays-backend:$GITHUB_SHA --record
         kubectl rollout status deployment/backend
 
     - name: Update Kubernetes frontend deployment
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        kubectl set image deployment/frontend frontend=$ECR_REGISTRY/chicago-plays-frontend:latest --record
+        kubectl set image deployment/frontend frontend=$ECR_REGISTRY/chicago-plays-frontend:$GITHUB_SHA --record
         kubectl rollout status deployment/frontend
