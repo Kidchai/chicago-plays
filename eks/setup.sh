@@ -4,7 +4,8 @@
 
 REGION="us-east-2"
 
-aws ecr create-repository --repository-name chicago-plays --region $REGION
+aws ecr create-repository --repository-name chicago-plays-frontend --region $REGION
+aws ecr create-repository --repository-name chicago-plays-backend  --region $REGION
 
 aws rds create-db-instance \
     --db-instance-identifier chicago-plays-db \
@@ -29,7 +30,7 @@ kubectl apply -f frontend-service.yaml,frontend-deployment.yaml,backend-service.
 # kubectl get services
 
 # Access:
-# kubectl get svc frontend.
+# kubectl get svc frontend
 
 # Get kubeconfig:
 # cat ~/.kube/config | base64
