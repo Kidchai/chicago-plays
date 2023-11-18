@@ -4,7 +4,6 @@
 CLUSTER="chicago-plays"
 REGION="us-east-2"
 
-
 aws ecr create-repository --repository-name chicago-plays-frontend --region $REGION
 aws ecr create-repository --repository-name chicago-plays-backend  --region $REGION
 
@@ -30,13 +29,12 @@ POLICY_ARN=$(aws iam create-policy \
   --query 'Policy.Arn' --output text)
 echo "Created IAM policy: $POLICY_ARN"
 
-SERVICE_ACCOUNT_NAMESPACE="kube-system"
 SERVICE_ACCOUNT_NAME="aws-load-balancer-controller"
 
 # Create an IAM role and associate it with the Kubernetes service account
 eksctl create iamserviceaccount \
   --cluster=$CLUSTER \
-  --namespace=$SERVICE_ACCOUNT_NAMESPACE \
+  --namespace=kube-system \
   --name=$SERVICE_ACCOUNT_NAME \
   --attach-policy-arn=$POLICY_ARN \
   --override-existing-serviceaccounts \
@@ -47,16 +45,18 @@ helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
-  -n $SERVICE_ACCOUNT_NAMESPACE \
+  -n kube-system \
   --set clusterName=$CLUSTER \
   --set serviceAccount.create=false \
   --set serviceAccount.name=$SERVICE_ACCOUNT_NAME
 
 echo "AWS Load Balancer Controller installation initiated"
 
+kubectl create serviceaccount $SERVICE_ACCOUNT_NAME -n kube-system
+
 # Verify the Installation
 echo "Verifying the installation..."
-kubectl get deployment -n $SERVICE_ACCOUNT_NAMESPACE aws-load-balancer-controller
+kubectl get deployment -n kube-system aws-load-balancer-controller
 
 kubectl create secret generic chicago-plays-db-secret \
   --from-literal=SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD \

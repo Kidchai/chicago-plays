@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: CI/CD
 
 on:
   push:
@@ -25,7 +25,17 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'backend/**'
+          frontend:
+            - 'frontend/**'
+
     - name: Build, tag, and push backend image to Amazon ECR
+      if: steps.filter.outputs.backend == 'true'
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
@@ -33,10 +43,11 @@ jobs:
         docker push $ECR_REGISTRY/chicago-plays-backend:latest
 
     - name: Build, tag, and push frontend image to Amazon ECR
+      if: steps.filter.outputs.frontend == 'true'
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        docker build -t $ECR_REGISTRY/chicago-plays-frontend client
+        docker build -t $ECR_REGISTRY/chicago-plays-frontend frontend
         docker push $ECR_REGISTRY/chicago-plays-frontend:latest
 
     - name: Set up Kubectl

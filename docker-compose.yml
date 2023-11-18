@@ -4,7 +4,7 @@ services:
   frontend:
     platform: linux/x86_64
     build:
-      context: client
+      context: frontend
       dockerfile: Dockerfile
     ports:
       - "3000:8080"
