@@ -1,8 +1,9 @@
 #!/bin/sh
 
 # Usage: DB_PASSWORD=somepassword ./setup.sh
-
+CLUSTER="chicago-plays"
 REGION="us-east-2"
+
 
 aws ecr create-repository --repository-name chicago-plays-frontend --region $REGION
 aws ecr create-repository --repository-name chicago-plays-backend  --region $REGION
@@ -19,9 +20,43 @@ aws rds create-db-instance \
 # TODO:
 # DB_URL=??? something.rds.amazonaws.com
 
-eksctl create cluster --name chicago-plays --region $REGION --nodegroup-name standard-workers --node-type t2.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
+eksctl create cluster --name $CLUSTER --region $REGION --nodegroup-name standard-workers --node-type t2.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
 
-aws eks --region $REGION update-kubeconfig --name chicago-plays
+aws eks --region $REGION update-kubeconfig --name $CLUSTER
+
+POLICY_ARN=$(aws iam create-policy \
+  --policy-name "AWSLoadBalancerControllerIAMPolicy" \
+  --policy-document file://iam_policy.json \
+  --query 'Policy.Arn' --output text)
+echo "Created IAM policy: $POLICY_ARN"
+
+SERVICE_ACCOUNT_NAMESPACE="kube-system"
+SERVICE_ACCOUNT_NAME="aws-load-balancer-controller"
+
+# Create an IAM role and associate it with the Kubernetes service account
+eksctl create iamserviceaccount \
+  --cluster=$CLUSTER \
+  --namespace=$SERVICE_ACCOUNT_NAMESPACE \
+  --name=$SERVICE_ACCOUNT_NAME \
+  --attach-policy-arn=$POLICY_ARN \
+  --override-existing-serviceaccounts \
+  --approve
+echo "Created IAM service account in Kubernetes"
+
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n $SERVICE_ACCOUNT_NAMESPACE \
+  --set clusterName=$CLUSTER \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=$SERVICE_ACCOUNT_NAME
+
+echo "AWS Load Balancer Controller installation initiated"
+
+# Verify the Installation
+echo "Verifying the installation..."
+kubectl get deployment -n $SERVICE_ACCOUNT_NAMESPACE aws-load-balancer-controller
 
 kubectl create secret generic chicago-plays-db-secret \
   --from-literal=SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD \
