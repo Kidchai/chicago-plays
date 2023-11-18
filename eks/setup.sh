@@ -26,7 +26,7 @@ kubectl apply -f frontend-service.yaml,frontend-deployment.yaml,backend-service.
 # Status:
 # kubectl get deployments
 # kubectl get pods
-# kubectl get services.
+# kubectl get services
 
 # Access:
 # kubectl get svc frontend.
