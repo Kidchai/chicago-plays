@@ -16,11 +16,16 @@ aws rds create-db-instance \
   --master-user-password $DB_PASSWORD \
   --no-publicly-accessible
 
+# TODO:
+# DB_URL=??? something.rds.amazonaws.com
+
 eksctl create cluster --name chicago-plays --region $REGION --nodegroup-name standard-workers --node-type t2.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
 
 aws eks --region $REGION update-kubeconfig --name chicago-plays
 
-kubectl create secret generic chicago-plays-db-secret --from-literal=SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD
+kubectl create secret generic chicago-plays-db-secret \
+  --from-literal=SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD \
+  --from-literal=SPRING_DATASOURCE_URL="jdbc:postgresql://$DB_URL:5432/chicago-plays"
 
 for file in *.yaml; do
   kubectl apply -f $file
