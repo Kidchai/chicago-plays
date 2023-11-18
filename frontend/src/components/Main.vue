@@ -148,7 +148,7 @@ const loadEvents = _ => {
       map(genre => genre.id).
       join(',')
 
-  const baseUrl = 'http://localhost:8080/api/events'
+  const baseUrl = '/api/events'
 
   const url = baseUrl + '?' + Object.keys(filters).filter(key => filters[key]).map(key => `${key}=${encodeURIComponent(filters[key])}`).join('&')
 
@@ -160,7 +160,7 @@ const loadEvents = _ => {
 }
 
 const loadGenres = _ => {
-  const url = 'http://localhost:8080/api/genres'
+  const url = '/api/genres'
 
   fetch(url)
     .then(response => response.json())
