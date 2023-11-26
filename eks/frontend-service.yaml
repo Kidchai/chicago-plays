@@ -4,12 +4,15 @@ metadata:
   labels:
     io.service: frontend
   name: frontend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
 spec:
   ports:
-    - name: "3000"
-      port: 3000
+    - protocol: TCP
+      port: 80
       targetPort: 8080
   selector:
     io.service: frontend
+  type: LoadBalancer
 status:
   loadBalancer: {}
