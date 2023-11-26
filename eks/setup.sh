@@ -7,6 +7,7 @@ REGION="us-east-2"
 aws ecr create-repository --repository-name chicago-plays-frontend --region $REGION
 aws ecr create-repository --repository-name chicago-plays-backend  --region $REGION
 
+# TODO: create rds in the same VPC as eks cluster
 aws rds create-db-instance \
   --db-instance-identifier chicago-plays-db \
   --db-instance-class db.t3.micro \

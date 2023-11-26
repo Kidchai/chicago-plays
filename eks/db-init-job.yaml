@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init
+spec:
+  template:
+    spec:
+      containers:
+      - name: sql-job
+        image: postgres:latest # or any other image with psql installed
+        command: ["/bin/bash", "-c"]
+        args:
+          - >
+            export PGPASSWORD=$(echo $SPRING_DATASOURCE_PASSWORD);
+            export PGHOST=$(echo $SPRING_DATASOURCE_URL | cut -d / -f 3 | cut -d : -f 1);
+            export PGDBNAME=$(echo $SPRING_DATASOURCE_URL | cut -d / -f 5);
+            
+            psql -h $PGHOST -U postgres -c "CREATE DATABASE $PGDBNAME;";
+        env:
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: chicago-plays-db-secret
+                key: SPRING_DATASOURCE_PASSWORD
+          - name: SPRING_DATASOURCE_URL
+            valueFrom:
+              secretKeyRef:
+                name: chicago-plays-db-secret
+                key: SPRING_DATASOURCE_URL
+      restartPolicy: Never
+  backoffLimit: 0
