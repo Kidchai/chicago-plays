@@ -13,9 +13,9 @@ spec:
           - >
             export PGPASSWORD=$(echo $SPRING_DATASOURCE_PASSWORD);
             export PGHOST=$(echo $SPRING_DATASOURCE_URL | cut -d / -f 3 | cut -d : -f 1);
-            export PGDBNAME=$(echo $SPRING_DATASOURCE_URL | cut -d / -f 5);
+            export PGDBNAME=$(echo $SPRING_DATASOURCE_URL | cut -d / -f 4);
             
-            psql -h $PGHOST -U postgres -c "CREATE DATABASE $PGDBNAME;";
+            psql -h $PGHOST -U postgres -c 'CREATE DATABASE "$PGDBNAME";';
         env:
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
