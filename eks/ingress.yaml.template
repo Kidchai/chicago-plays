@@ -12,15 +12,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 3000
-    - http:
-        paths:
           - path: /api/
             pathType: Prefix
             backend:
@@ -28,3 +19,12 @@ spec:
                 name: backend
                 port:
                   number: 8080
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000
