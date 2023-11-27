@@ -75,6 +75,9 @@ for file in *.yaml; do
   kubectl apply -f $file
 done
 
+ALB_INGRESS_HOSTNAME=`kubectl get ingress ingress -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`
+echo "ALB Ingress Hostname: $ALB_INGRESS_HOSTNAME, use it as CNAME DNS record"
+
 # Status:
 # kubectl get deployments
 # kubectl get pods
