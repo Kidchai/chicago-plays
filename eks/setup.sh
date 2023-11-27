@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Usage: DB_PASSWORD=somepassword ./setup.sh
+# Usage: DOMAIN=appdomain DB_PASSWORD=somepassword ./setup.sh
 CLUSTER="chicago-plays"
 REGION="us-east-2"
 
@@ -62,6 +62,14 @@ kubectl get deployment -n kube-system aws-load-balancer-controller
 kubectl create secret generic chicago-plays-db-secret \
   --from-literal=SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD \
   --from-literal=SPRING_DATASOURCE_URL="jdbc:postgresql://$DB_URL:5432/chicago-plays"
+
+DOMAIN_CERT_ARN=`aws acm request-certificate --domain-name $DOMAIN --validation-method DNS | grep CertificateArn | cut -d '"' -f 4`
+echo "Generated $DOMAIN certificate: $DOMAIN_CERT_ARN"
+
+CNAME_DATA=`aws acm describe-certificate --certificate-arn $DOMAIN_CERT_ARN --query 'Certificate.DomainValidationOptions[*].ResourceRecord'`
+echo $CNAME_DATA
+
+sed -e "s#DOMAIN_CERT_ARN#$DOMAIN_CERT_ARN#" ingress.yaml.template > ingress.yaml
 
 for file in *.yaml; do
   kubectl apply -f $file
