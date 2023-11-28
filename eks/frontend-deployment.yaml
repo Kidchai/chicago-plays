@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.service: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.service: frontend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.network/chicago-plays-default: "true"
+        io.service: frontend
+    spec:
+      containers:
+        - image: frontend
+          imagePullPolicy: Always
+          name: frontend
+          ports:
+            - containerPort: 8080
+              hostPort: 3000
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

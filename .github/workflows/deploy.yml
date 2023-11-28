@@ -1,0 +1,72 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - eks
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'backend/**'
+          frontend:
+            - 'frontend/**'
+
+    - name: Build, tag, and push backend image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build -t $ECR_REGISTRY/chicago-plays-backend:$GITHUB_SHA backend
+        docker push $ECR_REGISTRY/chicago-plays-backend:$GITHUB_SHA
+
+    - name: Build, tag, and push frontend image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build -t $ECR_REGISTRY/chicago-plays-frontend:$GITHUB_SHA frontend
+        docker push $ECR_REGISTRY/chicago-plays-frontend:$GITHUB_SHA
+
+    - name: Set up Kubectl
+      uses: azure/setup-kubectl@v3
+
+    - name: Configure Kubectl
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
+        kubectl config view
+
+    - name: Update Kubernetes backend deployment
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        kubectl set image deployment/backend backend=$ECR_REGISTRY/chicago-plays-backend:$GITHUB_SHA --record
+        kubectl rollout status deployment/backend
+
+    - name: Update Kubernetes frontend deployment
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        kubectl set image deployment/frontend frontend=$ECR_REGISTRY/chicago-plays-frontend:$GITHUB_SHA --record
+        kubectl rollout status deployment/frontend
